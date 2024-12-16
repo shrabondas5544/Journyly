@@ -35,11 +35,11 @@
       <img class="object-cover max-w-30 max-h-20 ml-10" src="./assets/journylyLOGO.png" alt="" >
     </a>
     <div id="nav-menu" class="hidden md:flex gap-10">
-      <a href="dashboard" class="font-medium hover:text-blue-500 transition-scale duration-300 ease-in-out hover:scale-110 ">home</a>
+      <a href="{{ route('account.dashboard') }}" class="font-medium hover:text-blue-500 transition-scale duration-300 ease-in-out hover:scale-110 ">home</a>
       <a href="hotelbook.html" class="font-medium hover:text-blue-500 transition-scale duration-300 ease-in-out hover:scale-110 ">Hotel</a>
-      <a href="airlineTticket.html" class="font-medium hover:text-blue-500 transition-scale duration-300 ease-in-out hover:scale-110 ">Flight</a>
+      <a href="{{ route('account.flight.search') }}" class="font-medium hover:text-blue-500 transition-scale duration-300 ease-in-out hover:scale-110 ">Flight</a>
       <a href="{{ route('account.bus.search') }}" class="font-medium hover:text-blue-500 transition-scale duration-300 ease-in-out hover:scale-110 ">Bus</a>
-      <a href="trainticket.html" class="font-medium hover:text-blue-500 transition-scale duration-300 ease-in-out hover:scale-110 ">Train</a>
+      <a href="" class="font-medium hover:text-blue-500 transition-scale duration-300 ease-in-out hover:scale-110 ">Train</a>
     </div>
 
     <div class="mr-12 hidden md:block relative" x-data="{ open: false }">
@@ -54,6 +54,9 @@
             <div x-show="open" 
                 @click.away="open = false"
                 class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2">
+                <a href="{{ route('account.userprofile') }}" class="block px-4 py-2 text-gray-800 hover:bg-blue-50 transition-colors duration-300 ease-in-out rounded-lg ">
+                    Profile
+                </a>
                 <a href="{{ route('account.dashboard') }}" class="block px-4 py-2 text-gray-800 hover:bg-blue-400 transition-colors duration-300 ease-in-out rounded-lg">
                     Dashboard
                 </a>
@@ -216,6 +219,9 @@
           <h5 class="text-lg mt-0 mb-2 text-blueGray-600">
             Find us on any of these platforms, we respond 1-2 business days.
           </h5>
+          <h6 class="text-sm mt-0 text-blueGray-600">Email: support@journyly.com</h6>
+          <h6 class="text-sm mt-0 text-blueGray-600">Phone: +880 1234-567890</h6>
+          <h6 class="text-sm mt-0 mb-2 text-blueGray-600">Address: Dhaka, Bangladesh</h6>
           <div class="mt-6 lg:mb-0 mb-6">
             <button class="bg-white text-lightBlue-400 shadow-lg font-normal h-10 w-10 items-center justify-center align-center rounded-full outline-none focus:outline-none mr-2" type="button">
               <i class="fab fa-twitter"></i></button><button class="bg-white text-lightBlue-600 shadow-lg font-normal h-10 w-10 items-center justify-center align-center rounded-full outline-none focus:outline-none mr-2" type="button">
@@ -237,7 +243,8 @@
                   <a class="text-blueGray-600 hover:text-blueGray-800 font-semibold block pb-2 text-sm" href="https://blog.creative-tim.com?ref=njs-profile">Blog</a>
                 </li>
                 <li>
-                  <a class="text-blueGray-600 hover:text-blueGray-800 font-semibold block pb-2 text-sm" href="https://www.github.com/creativetimofficial?ref=njs-profile">Github</a>
+                  <a class="text-blueGray-600 hover:text-blueGray-800 font-semibold block pb-2 text-sm hover:text-blue-500 transition-scale duration-300 ease-in-out " 
+                  href="https://github.com/shrabondas5544">Github</a>
                 </li>
                 <li>
                   <a class="text-blueGray-600 hover:text-blueGray-800 font-semibold block pb-2 text-sm" href="https://www.creative-tim.com/bootstrap-themes/free?ref=njs-profile">Free Products</a>
@@ -248,7 +255,8 @@
               <span class="block uppercase text-blueGray-500 text-sm font-semibold mb-2">Other Resources</span>
               <ul class="list-unstyled">
                 <li>
-                  <a class="text-blueGray-600 hover:text-blueGray-800 font-semibold block pb-2 text-sm" href="https://github.com/creativetimofficial/notus-js/blob/main/LICENSE.md?ref=njs-profile">MIT License</a>
+                  <a class="text-blueGray-600 hover:text-blueGray-800 font-semibold block pb-2 text-sm hover:text-blue-500 transition-scale duration-300 ease-in-out " 
+                  href="https://github.com/shrabondas5544/Journyly/blob/main/LICENSE">MIT License</a>
                 </li>
                 <li>
                   <a class="text-blueGray-600 hover:text-blueGray-800 font-semibold block pb-2 text-sm hover:text-blue-500 transition-scale duration-300 ease-in-out " 

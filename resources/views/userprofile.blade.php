@@ -20,12 +20,13 @@
 <div class="flex flex-col lg:flex-row min-h-screen">
     <!-- Sidebar - hidden by default on mobile -->
     <div id="sidebar" class="fixed lg:relative hidden lg:flex flex-col bg-blue-50 text-gray-700 h-screen w-full lg:w-64 p-4 shadow-xl z-40 lg:z-0">
-        <div class="mb-2 p-4">
+        <div>            
             <!-- Logo and Text Container -->
             <div class="flex items-center gap-3">
                 <!-- Logo Image -->
-                <img src="{{ asset('images/journylyLOGO.png') }}" alt="Logo" class="w-8 h-8 object-contain">
-                
+                <a href="{{ route('account.dashboard') }}">
+                    <img src="{{ asset('images/journylyLOGO.png') }}" alt="Logo" class="w-64 h-32 object-contain">
+                </a>       
             </div>
         </div>
         <nav class="flex flex-col gap-1 min-w-[240px] p-2 font-sans text-base font-normal text-gray-700">
@@ -226,10 +227,78 @@
         </div>
     </div><!--inbox--><div>
     <div><!--hotel history--></div>
-    <div><!--flight history--></div>
+    <!--flight history-->
+    <div id="flightHistorySection" class="min-h-screen p-4 flex items-center justify-center">
+        <div class="bg-white rounded-xl p-6 lg:p-8 shadow-lg w-full max-w-7xl mx-auto">
+            <div class="flex items-center mb-6">
+                <i class="fa-solid fa-plane text-3xl text-blue-500 mr-4"></i>
+                <h2 class="text-2xl font-semibold text-blue-900">Flight Booking History</h2>
+            </div>
+
+            @if($flightBookings->isEmpty())
+                <div class="text-center py-8 text-gray-500">
+                    <i class="fa-solid fa-ticket-simple text-4xl mb-4"></i>
+                    <p>No flight bookings found</p>
+                </div>
+            @else
+                <div class="overflow-x-auto">
+                    <table class="min-w-full bg-white">
+                        <thead class="bg-blue-50">
+                            <tr>
+                                <th class="py-3 px-4 text-left">Booking Date</th>
+                                <th class="py-3 px-4 text-left">From</th>
+                                <th class="py-3 px-4 text-left">To</th>
+                                <th class="py-3 px-4 text-left">Airline</th>
+                                <th class="py-3 px-4 text-left">Class</th>
+                                <th class="py-3 px-4 text-left">Flight No.</th>
+                                <th class="py-3 px-4 text-left">Departure</th>
+                                <th class="py-3 px-4 text-left">Return</th>
+                                <th class="py-3 px-4 text-left">Passengers</th>
+                                <th class="py-3 px-4 text-left">Total</th>
+                                <th class="py-3 px-4 text-left">Status</th>
+                                <th class="py-3 px-4 text-left">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100">
+                            @foreach($flightBookings as $booking)
+                            <tr class="hover:bg-gray-50">
+                                <td class="py-3 px-4">{{ $booking->booking_date }}</td>
+                                <td class="py-3 px-4">{{ $booking->from_location }}</td>
+                                <td class="py-3 px-4">{{ $booking->to_location }}</td>
+                                <td class="py-3 px-4">{{ $booking->airline_name }}</td>
+                                <td class="py-3 px-4">{{ $booking->flight_class }}</td>
+                                <td class="py-3 px-4">{{ $booking->flight_number }}</td>
+                                <td class="py-3 px-4">{{ $booking->departure_date }}</td>
+                                <td class="py-3 px-4">{{ $booking->return_date ?? 'N/A' }}</td>
+                                <td class="py-3 px-4">{{ $booking->number_of_passengers }}</td>
+                                <td class="py-3 px-4">BDT {{ number_format($booking->total, 2) }}৳</td>
+                                <td class="py-3 px-4">
+                                    <span class="px-2 py-1 rounded-full text-xs
+                                        {{ $booking->payment_status === 'pending' ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800' }}">
+                                        {{ ucfirst($booking->payment_status) }}
+                                    </span>
+                                </td>
+                                <td class="py-3 px-4">
+                                    <form action="{{ route('account.delete-flight-booking', $booking->id) }}" method="POST"
+                                        onsubmit="return confirm('Are you sure you want to delete this booking?');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="text-red-500 hover:text-red-700">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            @endif
+        </div>
+    </div>
     <!--bus history-->
     <div id="busHistorySection" class="min-h-screen p-4 flex items-center justify-center">
-        <div class="bg-white rounded-xl p-6 lg:p-8 shadow-lg w-full max-w-4xl mx-auto">
+        <div class="bg-white rounded-xl p-6 lg:p-8 shadow-lg w-full max-w-7xl mx-auto">
             <div class="flex items-center mb-6">
                 <i class="fa-solid fa-bus text-3xl text-blue-500 mr-4"></i>
                 <h2 class="text-2xl font-semibold text-blue-900">Bus Booking History</h2>
@@ -368,6 +437,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // Hide all sections first
             document.getElementById('profileSection').classList.add('hidden');
             document.getElementById('busHistorySection').classList.add('hidden');
+            document.getElementById('flightHistorySection').classList.add('hidden');
             // Add other sections here when you create them...
 
             // Show the clicked section
@@ -376,6 +446,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.getElementById('profileSection').classList.remove('hidden');
             } else if (buttonText === 'bus history') {
                 document.getElementById('busHistorySection').classList.remove('hidden');
+            } else if (buttonText === 'flight history') {
+                document.getElementById('flightHistorySection').classList.remove('hidden');
             }
             // Add other conditions for other sections...
 

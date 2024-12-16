@@ -33,6 +33,11 @@ Route::middleware(['auth'])->group(function () {
     // Bus booking routes    
     Route::delete('/account/bus-booking/{id}', [ProfileController::class, 'deleteBusBooking'])
         ->name('account.delete-bus-booking');
+        
+    // flight booking routes    
+    Route::delete('/account/flight-booking/{id}', [ProfileController::class, 'deleteFlightBooking'])
+        ->name('account.delete-flight-booking')
+        ->middleware('auth');
 });
 
 //flight
