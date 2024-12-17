@@ -12,15 +12,16 @@
   @vite('resources/css/app.css')
 </head>
 <body class=" min-h-screen bg-gradient-to-br from-blue-200 via-blue-50 to-transparent">
-  <nav class="p-3 flex mt-5 justify-between items-center">
+  <nav class="p-3 flex mt-2 justify-between items-center">
     <a href="dashboard" id="brand" >
-      <img class="object-cover max-w-30 max-h-20 ml-10" src="./assets/journylyLOGO.png" alt="" >
+      <img class="object-cover max-w-30 max-h-20 ml-10" src="{{ asset('images/journylyLOGO.png') }}" alt="" >
     </a>
     <div id="nav-menu" class="hidden md:flex gap-10">
       <a href="dashboard" class="font-medium hover:text-blue-500 transition-scale duration-300 ease-in-out hover:scale-110 ">home</a>
+      <a href="{{ route('admin.feedbacks') }}" class="font-medium hover:text-blue-500 transition-scale duration-300 ease-in-out hover:scale-110 ">feedbacks</a>
       <a href="hotelbook.html" class="font-medium hover:text-blue-500 transition-scale duration-300 ease-in-out hover:scale-110 ">Hotel</a>
       <a href="airlineTticket.html" class="font-medium hover:text-blue-500 transition-scale duration-300 ease-in-out hover:scale-110 ">Flight</a>
-      <a href="{{ route('account.bus.search') }}" class="font-medium hover:text-blue-500 transition-scale duration-300 ease-in-out hover:scale-110 ">Bus</a>
+      <a href="" class="font-medium hover:text-blue-500 transition-scale duration-300 ease-in-out hover:scale-110 ">Bus</a>
       <a href="trainticket.html" class="font-medium hover:text-blue-500 transition-scale duration-300 ease-in-out hover:scale-110 ">Train</a>
     </div>
 
@@ -47,12 +48,12 @@
                 </form>
             </div>
         @else
-            <a href="{{ route('admin.login') }}">
-                <button type="button" class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
-                    Login
-                    <i class="fa-solid fa-arrow-right"></i>
-                </button>
-            </a>
+        <a href="{{ route('admin.login') }}">
+            <button type="button" class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
+                Login
+                <i class="fa-solid fa-arrow-right"></i>
+            </button>
+        </a>
         @endauth
     </div>
 
@@ -78,7 +79,7 @@
         <a href="trainticket.html" class="font-medium m-3 p-3 hover:bg-blue-400 transition-colors duration-500 ease-in-out rounded-lg block">Train</a>
       </div> 
       <div class="h-[1px] bg-gray-300"></div>
-      <a href="welcome">
+      <a href="{{ route('admin.login') }}">
       <button type="button" class=" mr-12 mt-6 text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
         Login
         <i class="fa-solid fa-arrow-right"></i>

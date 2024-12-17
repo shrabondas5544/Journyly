@@ -7,7 +7,8 @@
   <script src="https://kit.fontawesome.com/4b5d033142.js" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="https://demos.creative-tim.com/notus-js/assets/styles/tailwind.css">
   <link rel="stylesheet" href="https://demos.creative-tim.com/notus-js/assets/vendor/@fortawesome/fontawesome-free/css/all.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>  
+  <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script> 
+  <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script> 
   @vite('resources/css/app.css')
 </head>
 <body class=" min-h-screen bg-gradient-to-br from-blue-200 via-blue-50 to-transparent" x-data="{ showSuccess: {{ Session::has('success') ? 'true' : 'false' }} }" x-init="setTimeout(() => { showSuccess = false }, 5000)">
@@ -377,63 +378,118 @@
         <p class="text-gray-600">Get personalized assistance from our travel experts.</p>
       </div>
     </div>
-  </div>  
-  
-  <section>
-    <div class="bg-gray-300 text-black py-10">
-      <div class="container mx-auto px-4 md:px-8">
-        <div class="flex flex-col md:flex-row my-6 md:my-24">
-          <div class="flex flex-col w-full md:w-2/4 justify-center">
-            <div class="bg-white rounded-lg shadow-lg p-8">
-              <h4 class="text-2xl mb-6">Have a suggestion?</h4>
-              <form id="feedbackForm">
-                <div class="mb-4">
-                  <label class="block text-gray-700 text-sm font-bold mb-2">Email</label>
-                  <input type="email" class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2" placeholder="Your Email" />
-                </div>
-                <div class="mb-4">
-                  <label class="block text-gray-700 text-sm font-bold mb-2">Message</label>
-                  <textarea class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2" rows="4" placeholder="Your Feedback"></textarea>
-                </div>
-                <button class="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 shadow hover:shadow-lg outline-none focus:outline-none transition-all duration-150">Submit</button>
-              </form>
-            </div>
+  </div>
+  <section x-data="{ showSuccess: false, successMessage: '' }">
+      <!-- Success Alert -->
+      <div x-show="showSuccess"
+          x-transition:enter="transition ease-out duration-300"
+          x-transition:enter-start="opacity-0 transform -translate-y-2"
+          x-transition:enter-end="opacity-100 transform translate-y-0"
+          x-transition:leave="transition ease-in duration-300"
+          x-transition:leave-start="opacity-100 transform translate-y-0"
+          x-transition:leave-end="opacity-0 transform -translate-y-2"
+          class="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 w-auto max-w-md">
+          <div class="flex items-center p-3 bg-green-100 rounded-lg shadow-lg">
+              <svg class="flex-shrink-0 w-6 h-6 text-green-700" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+              </svg>
+              <div class="ml-3 text-base font-medium text-green-700" x-text="successMessage"></div>
           </div>
-  
-          <div class="flex flex-col w-full md:w-2/4 p-4">
-            <div style="height: 400px;" class="bg-white rounded-lg shadow-lg overflow-hidden">
-              <div id="map" style="height: 100%; width: 100%;"></div>
-            </div>
-            
-          </div>
-        </div>
       </div>
-    </div>
-  
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css" rel="stylesheet" />
-    
-    <script>
-      window.onload = function() {
-        // Set default coordinates
-        const defaultLat = 23.7634345420742; 
-        const defaultLng = 90.41512739645772;
-        
-        const map = L.map('map').setView([defaultLat, defaultLng], 13);
-        
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-          maxZoom: 19,
-          attribution: '© OpenStreetMap contributors'
-        }).addTo(map);
-  
-        // Add marker at default location
-        const marker = L.marker([defaultLat, defaultLng]).addTo(map);
-        
-      }
-    </script>
-  </section>
-  
 
+      <!-- Your existing form -->
+      <div class="bg-gray-300 text-black py-10">
+          <div class="container mx-auto px-4 md:px-8">
+              <div class="flex flex-col md:flex-row my-6 md:my-24">
+                  <div class="flex flex-col w-full md:w-2/4 justify-center">
+                      <div class="bg-white rounded-lg shadow-lg p-8">
+                          <h4 class="text-2xl mb-6">Give some feedback?</h4>
+                          <form id="feedbackForm">
+                              @csrf
+                              <div class="mb-4">
+                                  <label class="block text-gray-700 text-sm font-bold mb-2">Email</label>
+                                  <input type="email" name="email" class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2" placeholder="Your Email" required />
+                              </div>
+                              <div class="mb-4">
+                                  <label class="block text-gray-700 text-sm font-bold mb-2">Message</label>
+                                  <textarea name="message" class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2" rows="4" placeholder="Your Feedback" required></textarea>
+                              </div>
+                              <button type="submit" class="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 shadow hover:shadow-lg outline-none focus:outline-none transition-all duration-150">Submit</button>
+                          </form>
+                      </div>
+                  </div>
+
+                  <!-- Your existing map div -->
+                  <div class="flex flex-col w-full md:w-2/4 p-4">
+                      <div style="height: 400px;" class="bg-white rounded-lg shadow-lg overflow-hidden">
+                          <div id="map" style="height: 100%; width: 100%;"></div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
+      <link href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css" rel="stylesheet" />
+    
+      <script>
+        window.onload = function() {
+          // Set default coordinates
+          const defaultLat = 23.7634345420742; 
+          const defaultLng = 90.41512739645772;
+        
+          const map = L.map('map').setView([defaultLat, defaultLng], 13);
+        
+          L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '© OpenStreetMap contributors'
+          }).addTo(map);
+  
+          // Add marker at default location
+          const marker = L.marker([defaultLat, defaultLng]).addTo(map);
+        
+        }
+      </script>
+
+      <!-- Updated JavaScript for form submission -->
+      <script>
+        document.getElementById('feedbackForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            
+            fetch('{{ route("feedback.store") }}', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    // Get Alpine.js component and update state
+                    const component = Alpine.data('component', () => ({
+                        showSuccess: true,
+                        successMessage: data.message
+                    }));
+                    
+                    // Reset form
+                    this.reset();
+                    
+                    // Auto-hide message after 3 seconds
+                    setTimeout(() => {
+                        component.showSuccess = false;
+                    }, 3000);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while submitting feedback.');
+            });
+        });
+      </script>
+  </section> 
   <footer class="relative bg-blueGray-200 pt-8 pb-6">
     <div class="container mx-auto px-4">
       <div class="flex flex-wrap text-left lg:text-left">
@@ -529,8 +585,8 @@
            console.error(countUp.error);
            number.innerHTML = value;
            }
-       }); 
+       });
   </script>
 </body>
-<script src="script.js"></script>
+<script src="{{ asset('js/script.js') }}"></script>
 </html>
