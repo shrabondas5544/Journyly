@@ -11,6 +11,7 @@ use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\BusBookingController;
 use App\Http\Controllers\FlightBookingController;
+use App\Http\Controllers\Admin\AdminBusController;
 use App\Http\Controllers\admin\LoginController as AdminLoginController;
 use App\Http\Controllers\admin\DashboardController as AdminDashboardController;
 
@@ -96,6 +97,17 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/feedbacks', [FeedbackController::class, 'index'])->name('feedbacks');
         Route::patch('/feedback/{feedback}/status', [FeedbackController::class, 'updateStatus'])->name('feedback.update-status');
         Route::delete('/feedback/{feedback}', [FeedbackController::class, 'destroy'])->name('feedback.delete');
+
+        // Bus Panel routes
+        Route::get('/buspanel', [AdminBusController::class, 'index'])->name('buspanel');
+        Route::get('/add-bus', [AdminBusController::class, 'create'])->name('add-bus');
+        Route::post('/store-bus', [AdminBusController::class, 'store'])->name('store-bus');
+        Route::patch('/bus-booking/{booking}/status', [AdminBusController::class, 'updateStatus'])
+            ->name('update-booking-status');
+        // Optional Ajax routes if needed
+        Route::get('/bus-list', [AdminBusController::class, 'getBusList'])->name('get-bus-list');
+        Route::get('/get-stats', [AdminBusController::class, 'getStats'])->name('get-stats');
+        Route::delete('/delete-bus/{bus}', [AdminBusController::class, 'destroy'])->name('delete-bus');
     });
 });
 
