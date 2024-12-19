@@ -260,6 +260,9 @@
         }
     });
 
+    // Check if user is authenticated
+    const isAuthenticated = {{ Auth::check() ? 'true' : 'false' }};
+
     let currentSort = '';
     let selectedDepartureSlots = [];
     let selectedArrivalSlots = [];
@@ -423,15 +426,22 @@
                         </p>
 
                         ${flight.available_seats > 0 ? 
-                            `<form action="${bookingUrl}" method="GET">
-                                <input type="hidden" name="flight_price" value="${flight.discounted_price}">
-                                <input type="hidden" name="departure_date" value="${flight.departure_date}">
-                                <input type="hidden" name="return_date" value="${flight.return_date || ''}">
-                                <button type="submit" 
-                                        class="mt-2 bg-sky-500 text-white px-4 py-1 rounded-md hover:bg-sky-600 hover:scale-105 transition-all duration-300 w-full">
-                                    Book Ticket
-                                </button>
-                            </form>`
+                            isAuthenticated ?
+                                `<form action="${bookingUrl}" method="GET">
+                                    <input type="hidden" name="flight_price" value="${flight.discounted_price}">
+                                    <input type="hidden" name="departure_date" value="${flight.departure_date}">
+                                    <input type="hidden" name="return_date" value="${flight.return_date || ''}">
+                                    <button type="submit" 
+                                            class="mt-2 bg-sky-500 text-white px-4 py-1 rounded-md hover:bg-sky-600 hover:scale-105 transition-all duration-300 w-full">
+                                        Book Ticket
+                                    </button>
+                                </form>`
+                                :
+                                `<a href="{{ route('account.login') }}" class="block">
+                                    <button class="mt-2 bg-sky-500 text-white px-4 py-1 rounded-md hover:bg-sky-600 hover:scale-105 transition-all duration-300 w-full">
+                                        Book Ticket
+                                    </button>
+                                </a>`
                             : 
                             `<button disabled 
                                     class="mt-2 bg-gray-400 text-white px-4 py-1 rounded-md w-full cursor-not-allowed">
