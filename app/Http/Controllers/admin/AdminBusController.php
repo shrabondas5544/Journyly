@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Bus;
@@ -11,13 +12,15 @@ class AdminBusController extends Controller
     {
         // Get bookings with user relationship
         $bookings = BusBooking::with('user')->latest()->get();
-        
+       
         // Get all buses
         $buses = Bus::latest()->get();
-        
-        // Payment status stats
+       
+        // Calculate Statistics
         $stats = [
-            'total' => BusBooking::count(),
+            'total_buses' => Bus::count(),
+            'total_bookings' => BusBooking::count(),
+            'total_revenue' => BusBooking::where('payment_status', 'paid')->sum('total'),
             'paid' => BusBooking::where('payment_status', 'paid')->count(),
             'pending' => BusBooking::where('payment_status', 'pending')->count()
         ];
@@ -37,7 +40,7 @@ class AdminBusController extends Controller
             ->get()
             ->pluck('count', 'bus_type')
             ->toArray();
-    
+   
         return view('admin.buspanel', compact('bookings', 'buses', 'stats', 'operatorStats', 'busTypeStats'));
     }
 
@@ -71,7 +74,6 @@ class AdminBusController extends Controller
         }
 
         Bus::create($validated);
-
         return redirect()->route('admin.buspanel')
             ->with('success', 'Bus added successfully!');
     }
@@ -82,7 +84,7 @@ class AdminBusController extends Controller
         return redirect()->back()->with('success', 'Booking status updated successfully');
     }
 
-    // Ajax endpoints for dynamic content loading if needed
+    // Ajax endpoints for dynamic content loading
     public function getBusList()
     {
         $buses = Bus::latest()->get();
@@ -92,7 +94,9 @@ class AdminBusController extends Controller
     public function getStats()
     {
         $stats = [
-            'total' => BusBooking::count(),
+            'total_buses' => Bus::count(),
+            'total_bookings' => BusBooking::count(),
+            'total_revenue' => BusBooking::where('payment_status', 'paid')->sum('total'),
             'paid' => BusBooking::where('payment_status', 'paid')->count(),
             'pending' => BusBooking::where('payment_status', 'pending')->count()
         ];
@@ -107,7 +111,7 @@ class AdminBusController extends Controller
                 ->with('success', 'Bus deleted successfully!');
         } catch (\Exception $e) {
             return redirect()->route('admin.buspanel')
-                >with('error', 'Error deleting bus: ' . $e->getMessage());
+                ->with('error', 'Error deleting bus: ' . $e->getMessage());
         }
     }
 }

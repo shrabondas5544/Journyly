@@ -6,6 +6,7 @@
     <title>Add New Bus - Admin Panel</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://kit.fontawesome.com/4b5d033142.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     @vite('resources/css/app.css')
 </head>
 <body class="min-h-screen bg-gradient-to-br from-blue-200 via-blue-50 to-transparent">
@@ -16,41 +17,82 @@
         <i class="fa-solid fa-bars text-xl"></i>
     </button>
 </div>
-
-<div class="flex flex-col lg:flex-row min-h-screen">
-    <!-- Sidebar -->
-    <div id="sidebar" class="fixed lg:relative hidden lg:flex flex-col bg-blue-50 text-gray-700 h-screen w-full lg:w-64 p-4 shadow-xl z-40 lg:z-0">
-        <div>            
-            <div class="flex items-center gap-3">
-                <a href="{{ route('admin.dashboard') }}">
-                    <img src="{{ asset('images/journylyLOGO.png') }}" alt="Logo" class="w-64 h-32 object-contain">
-                </a>       
-            </div>
+<nav class="p-3 flex mt-2 justify-between items-center">
+        <a href="{{ route('admin.dashboard') }}" id="brand">
+            <img class="object-cover max-w-30 max-h-20 ml-10" src="{{ asset('images/journylyLOGO.png') }}" alt="">
+        </a>
+        <div id="nav-menu" class="hidden md:flex gap-10">
+            <a href="{{ route('admin.dashboard') }}" class="font-medium hover:text-blue-500 transition-scale duration-300 ease-in-out hover:scale-110">home</a>
+            <a href="{{ route('admin.feedbacks') }}" class="font-medium hover:text-blue-500 transition-scale duration-300 ease-in-out hover:scale-110">feedbacks</a>
+            <a href="#" class="font-medium hover:text-blue-500 transition-scale duration-300 ease-in-out hover:scale-110">Hotel</a>
+            <a href="{{ route('admin.flightpanel') }}" class="font-medium hover:text-blue-500 transition-scale duration-300 ease-in-out hover:scale-110">Flight</a>
+            <a href="{{ route('admin.buspanel') }}" class="font-medium hover:text-blue-500 transition-scale duration-300 ease-in-out hover:scale-110">Bus</a>
+            <a href="#" class="font-medium hover:text-blue-500 transition-scale duration-300 ease-in-out hover:scale-110">Train</a>
         </div>
-        <nav class="flex flex-col gap-1 min-w-[240px] p-2 font-sans text-base font-normal text-gray-700">
-            <a href="#" class="flex items-center w-full p-3 rounded-lg text-start leading-tight transition-all hover:bg-blue-100 hover:bg-opacity-80 focus:bg-blue-200 focus:bg-opacity-80 active:bg-blue-50 active:bg-opacity-80 hover:text-blue-900 focus:text-blue-900 active:text-blue-900 outline-none">
-                <div class="grid place-items-center mr-4">
-                    <i class="fa-solid fa-user"></i>
-                </div>User info
-            </a>
-            <!-- Add other sidebar items similar to your main panel -->
-            <a href="{{ route('admin.buspanel') }}" class="flex items-center w-full p-3 bg-blue-100 rounded-lg text-start leading-tight">
-                <div class="grid place-items-center mr-4">
-                    <i class="fa-solid fa-bus"></i>
-                </div>Bus Panel
-            </a>
-            <!-- Add logout form -->
-            <form action="{{ route('admin.logout') }}" method="POST" class="w-full">
-                @csrf
-                <button type="submit" class="flex items-center w-full p-3 rounded-lg text-start leading-tight hover:bg-blue-100">
-                    <div class="grid place-items-center mr-4">
-                        <i class="fa-solid fa-right-from-bracket"></i>
-                    </div>
-                    Log Out
+
+        <div class="mr-12 hidden md:block relative" x-data="{ open: false }">
+            @auth
+                <button @click="open = !open" class="flex items-center space-x-2 text-gray-700 hover:text-blue-500 transition-scale duration-300 ease-in-out hover:scale-110">
+                    <i class="fa-duotone fa-solid fa-user" style="--fa-primary-color: #0080ff; --fa-secondary-color: #0080ff;"></i>
+                    <span class="font-medium">{{ Auth::user()->name }}</span>
+                    <i class="fa-solid fa-caret-down" style="--fa-primary-color: #0080ff;"></i>
                 </button>
-            </form>
-        </nav>
-    </div>
+            
+                <div x-show="open" 
+                    @click.away="open = false"
+                    class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2">
+                    <a href="{{ route('admin.dashboard') }}" class="block px-4 py-2 text-gray-800 hover:bg-blue-400 transition-colors duration-300 ease-in-out rounded-lg">
+                        Dashboard
+                    </a>
+                    <form method="POST" action="{{ route('admin.logout') }}">
+                        @csrf
+                        <button type="submit" class="w-full text-left px-4 py-2 text-gray-800 hover:bg-blue-400 transition-colors duration-300 ease-in-out rounded-lg">
+                            Logout
+                        </button>
+                    </form>
+                </div>
+            @else
+                <a href="{{ route('admin.login') }}">
+                    <button type="button" class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
+                        Login
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </a>
+            @endauth
+        </div>
+
+        <button class="p-6 md:hidden" onclick="handleMenu()">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+        
+        <div id="nav-dialog" class="fixed z-10 bg-gradient-to-br from-blue-200 via-blue-50 to-transparent md:hidden inset-0 p-3 hidden">
+            <div id="nav-bar" class="flex justify-between">
+                <a href="#" id="brand">
+                    <img class="object-cover max-w-30 max-h-20 ml-10" src="{{ asset('images/journylyLOGO.png') }}" alt="">
+                </a>
+                <button class="p-6 md:hidden" onclick="handleMenu()">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div> 
+            <div class="mt-6">
+                <a href="{{ route('admin.dashboard') }}" class="font-medium m-3 p-3 hover:bg-blue-400 transition-colors duration-500 ease-in-out rounded-lg block">home</a>
+                <a href="{{ route('admin.feedbacks') }}" class="font-medium m-3 p-3 hover:bg-blue-400 transition-colors duration-500 ease-in-out rounded-lg block">feedbacks</a>
+                <a href="#" class="font-medium m-3 p-3 hover:bg-blue-400 transition-colors duration-500 ease-in-out rounded-lg block">Hotel</a>
+                <a href="#" class="font-medium m-3 p-3 hover:bg-blue-400 transition-colors duration-500 ease-in-out rounded-lg block">Flight</a>
+                <a href="#" class="font-medium m-3 p-3 hover:bg-blue-400 transition-colors duration-500 ease-in-out rounded-lg block">Bus</a>
+                <a href="#" class="font-medium m-3 p-3 hover:bg-blue-400 transition-colors duration-500 ease-in-out rounded-lg block">Train</a>
+            </div> 
+            <div class="h-[1px] bg-gray-300"></div>
+            <a href="{{ route('admin.login') }}">
+                <button type="button" class="mr-12 mt-6 text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
+                    Login
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </a>    
+        </div>
+    </nav>
+<!-------------------------------------------------------------------------------------------------------------------------------------->
+<div class="flex flex-col lg:flex-row min-h-screen">
 
     <!-- Main Content Area -->
     <div class="flex-1 p-8">
@@ -77,9 +119,9 @@
                 <div class="mb-6 flex items-center justify-between">
                     
                     <h1 class="text-2xl font-semibold text-blue-900"><i class="fa-solid fa-plus mr-2"></i>Add New Bus</h1>
-                    <!--<a href="{{ route('admin.buspanel') }}" class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600">
-                        Back to Bus Panel
-                    </a>-->
+                    <a href="{{ route('admin.flightpanel') }}" class="text-blue-500 hover:text-blue-700">
+                        <i class="fa-solid fa-arrow-left mr-2"></i>Back to Bus Panel
+                    </a>
                 </div>
                 <form action="{{ route('admin.store-bus') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
                     @csrf

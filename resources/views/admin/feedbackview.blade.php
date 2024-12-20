@@ -19,7 +19,7 @@
             <a href="{{ route('admin.dashboard') }}" class="font-medium hover:text-blue-500 transition-scale duration-300 ease-in-out hover:scale-110">home</a>
             <a href="{{ route('admin.feedbacks') }}" class="font-medium hover:text-blue-500 transition-scale duration-300 ease-in-out hover:scale-110">feedbacks</a>
             <a href="#" class="font-medium hover:text-blue-500 transition-scale duration-300 ease-in-out hover:scale-110">Hotel</a>
-            <a href="#" class="font-medium hover:text-blue-500 transition-scale duration-300 ease-in-out hover:scale-110">Flight</a>
+            <a href="{{ route('admin.flightpanel') }}" class="font-medium hover:text-blue-500 transition-scale duration-300 ease-in-out hover:scale-110">Flight</a>
             <a href="{{ route('admin.buspanel') }}" class="font-medium hover:text-blue-500 transition-scale duration-300 ease-in-out hover:scale-110">Bus</a>
             <a href="#" class="font-medium hover:text-blue-500 transition-scale duration-300 ease-in-out hover:scale-110">Train</a>
         </div>
