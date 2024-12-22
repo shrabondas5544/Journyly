@@ -192,6 +192,35 @@
             </p>
         </section>
 
+        <!-- FAQ Section -->
+        <section>
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">6. FAQ</h2>
+            <p class="text-gray-600 leading-relaxed mb-2">
+            1. What personal information does Journyly collect?
+            We collect personal identification information such as your name, email, phone number, travel preferences, booking history, payment details, and device usage information to provide and improve our services.</p>
+            <p class="text-gray-600 leading-relaxed mb-2">
+            2. How can I access or update my personal information?
+            You can access or update your personal information by logging into your Journyly account or contacting our support team at support@journyly.com.</p>
+            <p class="text-gray-600 leading-relaxed mb-2">
+            3. Is my payment information secure?
+            Yes, we use secure encryption methods and payment processors to ensure that your payment information is protected during transactions.</p>
+            <p class="text-gray-600 leading-relaxed mb-2">
+            4. Can I delete my account?
+            Yes, you can request to delete your account by contacting our support team. Please note that some information may be retained as required by law.</p>
+            <p class="text-gray-600 leading-relaxed mb-2">
+            5. How does Journyly use cookies?
+            We use cookies to enhance your browsing experience, analyze site traffic, and understand visitor behavior. You can manage your cookie preferences in your browser settings.</p>
+            <p class="text-gray-600 leading-relaxed mb-2">
+            6. Will my information be shared with third parties?
+            Your information may be shared with trusted service providers, payment processors, and legal authorities as needed to fulfill bookings and comply with regulations.</p>
+            <p class="text-gray-600 leading-relaxed mb-2">
+            7. How can I opt-out of marketing communications?
+            You can opt-out of marketing communications by clicking the "unsubscribe" link in our emails or updating your preferences in your account settings.</p>
+            <p class="text-gray-600 leading-relaxed mb-2">
+            8. What should I do if I suspect unauthorized access to my account?
+            If you suspect unauthorized access, please change your password immediately and contact our support team for assistance.</p>
+        </section>
+
         <!-- Contact Section -->
         <section>
             <h2 class="text-xl font-semibold text-gray-800 mb-4">7. Contact Us</h2>
@@ -205,7 +234,6 @@
             </ul>
         </section>
 
-          <!-- [Additional sections follow the same pattern] -->
         </div>
       </div>
     </div>

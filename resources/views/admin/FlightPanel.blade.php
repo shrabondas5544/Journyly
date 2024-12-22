@@ -223,17 +223,20 @@
 
                 <!-- Statistics Cards -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <!-- Total Flights Card -->
                     <div class="bg-blue-50 p-6 rounded-xl shadow hover:text-blue-100 transition-scale duration-300 ease-in-out hover:scale-95 ">
-                        <h3 class="text-lg font-medium text-gray-700 mb-2 ">Total Flights</h3>
-                        <p class="text-3xl font-bold text-blue-600">{{ $stats['total_flights'] }}</p>
+                        <h3 class="text-gray-700 text-lg font-medium mb-2">Total Flights</h3>
+                        <p class="text-4xl font-bold text-blue-600">{{ $stats['total_flights'] }}</p>
                     </div>
+                    <!-- Total Bookings Card -->
                     <div class="bg-blue-50 p-6 rounded-xl shadow hover:text-blue-100 transition-scale duration-300 ease-in-out hover:scale-95">
-                        <h3 class="text-lg font-medium text-gray-700 mb-2">Total Bookings</h3>
-                        <p class="text-3xl font-bold text-blue-600">{{ $stats['total_bookings'] }}</p>
+                        <h3 class="text-gray-700 text-lg font-medium mb-2">Total Bookings</h3>
+                        <p class="text-4xl font-bold text-blue-600">{{ $stats['total_bookings'] }}</p>
                     </div>
+                    <!-- Total Revenue Card -->
                     <div class="bg-blue-50 p-6 rounded-xl shadow hover:text-blue-100 transition-scale duration-300 ease-in-out hover:scale-95">
-                        <h3 class="text-lg font-medium text-gray-700 mb-2">Total Revenue</h3>
-                        <p class="text-3xl font-bold text-blue-600">BDT {{ number_format($stats['total_revenue'], 2) }}৳</p>
+                        <h3 class="text-gray-700 text-lg font-medium mb-2">Total Revenue</h3>
+                        <p class="text-4xl font-bold text-blue-600">BDT {{ number_format($stats['total_revenue'], 2) }}৳</p>
                     </div>
                 </div>
 

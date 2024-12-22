@@ -3,13 +3,16 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BusController;
 use App\Http\Controllers\PageController;
+use App\Http\Controllers\HotelController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\TrainController;
 use App\Http\Controllers\FlightController;
+use App\Http\Controllers\RatingController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\BusBookingController;
+use App\Http\Controllers\HotelBookingController;
 use App\Http\Controllers\FlightBookingController;
 use App\Http\Controllers\Admin\AdminBusController;
 use App\Http\Controllers\admin\AdminFlightController;
@@ -64,6 +67,8 @@ Route::post('/bus/book/{id}', [BusBookingController::class, 'store'])
     ->name('bus.book.store')
     ->middleware('auth');
 
+//hotel--------------------------------------------------------------------------------------------
+
 //user---------------------------------------------------------------------------------------------------------------------------------
 Route::get('/account/login',[LoginController::class,'index'])->name('account.login');
 Route::get('/account/register',[LoginController::class,'register'])->name('account.register');
@@ -109,7 +114,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/bus-list', [AdminBusController::class, 'getBusList'])->name('get-bus-list');
         Route::get('/get-stats', [AdminBusController::class, 'getStats'])->name('get-stats');
         Route::delete('/delete-bus/{bus}', [AdminBusController::class, 'destroy'])->name('delete-bus');
-
+        Route::post('/send-notification/{booking}', [AdminBusController::class, 'sendNotification'])
+            ->name('send-notification');
+            
         // Flight Panel routes
         Route::get('/flightpanel', [AdminFlightController::class, 'index'])->name('flightpanel');
         Route::get('/add-flight', [AdminFlightController::class, 'create'])->name('add-flight');
@@ -117,6 +124,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::patch('/flight-booking/{booking}/status', [AdminFlightController::class, 'updateStatus'])
             ->name('update-flight-booking-status');
         Route::delete('/delete-flight/{flight}', [AdminFlightController::class, 'destroy'])->name('delete-flight');
+
+        
+
+
         });
+    
 });
 

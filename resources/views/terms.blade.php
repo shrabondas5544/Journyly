@@ -109,83 +109,121 @@
   </nav>
   <main class="container mx-auto px-4 py-8 max-w-4xl">
         <div class="bg-white shadow-lg rounded-lg p-8">
-            <h1 class="text-3xl font-bold text-gray-800 mb-6">Privacy Policy</h1>
+            <h1 class="text-2xl font-bold mb-4">Terms and Conditions</h1>
             <p class="text-gray-600 mb-8">Last Updated: December 15, 2024</p>
+            <p class="text-gray-600 mb-8">
+            Welcome to Journyly! These Terms and Conditions outline the rules and regulations for the use of our travel planning and booking platform. 
+            By accessing or using Journyly, you agree to comply with these terms. If you do not agree, please do not use our services.
+            </p>
 
             <div class="space-y-8">
                 <!-- Information Collection Section -->
                 <section>
-                    <h2 class="text-xl font-semibold text-gray-800 mb-4">1. Information We Collect</h2>
+                    <h2 class="text-xl font-semibold text-gray-800 mb-4">1. Acceptance of Terms</h2>
                     <p class="text-gray-600 leading-relaxed mb-3">
-                        At Journyly, we collect various types of information to provide and improve our services:
+                    By creating an account, accessing, or using Journyly, you agree to abide by these Terms and Conditions, as well as any applicable laws and regulations.
                     </p>
-                    <ul class="list-disc ml-6 text-gray-600 space-y-2">
-                        <li>Personal identification information (Name, email, phone number)</li>
-                        <li>Travel preferences and booking history</li>
-                        <li>Payment information</li>
-                        <li>Device and usage information</li>
-                    </ul>
                 </section>
 
                 <!-- Information Usage Section -->
                 <section>
-                    <h2 class="text-xl font-semibold text-gray-800 mb-4">2. How We Use Your Information</h2>
+                    <h2 class="text-xl font-semibold text-gray-800 mb-4">2. User Responsibilities</h2>
                     <p class="text-gray-600 leading-relaxed mb-3">
                         We use the collected information for the following purposes:
                     </p>
                     <ul class="list-disc ml-6 text-gray-600 space-y-2">
-                        <li>Processing your bookings and transactions</li>
-                        <li>Providing customer support</li>
+                        <li>You must be at least 18 years old to use Journyly.</li>
+                        <li>You are responsible for ensuring the accuracy of the information provided during registration or booking.</li>
                         <li>Sending important service updates</li>
-                        <li>Improving our services</li>
+                        <li>Misuse of the platform, such as fraudulent bookings or inappropriate conduct, is strictly prohibited.</li>
                     </ul>
                 </section>
 
                 <!-- Information Sharing Section -->
                 <section>
-                    <h2 class="text-xl font-semibold text-gray-800 mb-4">3. Information Sharing</h2>
+                    <h2 class="text-xl font-semibold text-gray-800 mb-4">3. Services Offered</h2>
                     <p class="text-gray-600 leading-relaxed mb-3">
-                        We may share your information with:
+                      Journyly provides the following services:
                     </p>
                     <ul class="list-disc ml-6 text-gray-600 space-y-2">
-                        <li>Service providers to fulfill your bookings</li>
-                        <li>Payment processors for transactions</li>
-                        <li>Legal authorities when required</li>
-                        <li>Third-party service providers</li>
+                        <li>Destination exploration by state, district, or specific location.</li>
+                        <li>Integrated booking for hotels, flights, and local tour guides.</li>
+                        <li>Personalized itineraries and bundled travel deals.</li>
                     </ul>
                 </section>
 
                 <!-- Data Security Section -->
                 <section>
-                    <h2 class="text-xl font-semibold text-gray-800 mb-4">4. Data Security</h2>
-                    <p class="text-gray-600 leading-relaxed">
-                        We implement appropriate security measures to protect your information. This includes encryption,
-                        secure data storage, and regular security assessments. However, no method of transmission over
-                        the internet is 100% secure.
+                    <h2 class="text-xl font-semibold text-gray-800 mb-4">4. Payments and Refunds</h2>
+                    <p class="text-gray-600 leading-relaxed">             
                     </p>
+                    <ul class="list-disc ml-6 text-gray-600 space-y-2">
+                        <li>All payments are processed securely through third-party payment providers.</li>
+                        <li>Refunds and cancellations are subject to the policies of the respective service providers (e.g., airlines, hotels).</li>
+                    </ul>
                 </section>
 
                 <!-- User Rights Section -->
                 <section>
-                    <h2 class="text-xl font-semibold text-gray-800 mb-4">5. Your Rights</h2>
+                    <h2 class="text-xl font-semibold text-gray-800 mb-4">5. Privacy and Security</h2>
                     <p class="text-gray-600 leading-relaxed mb-3">
-                        You have certain rights regarding your personal data:
+                    We are committed to safeguarding your personal data. Please refer to our
+                    <a class="text-blue-500 bg-blue-100" href="{{ route('privacy') }}">Privacy&Policy </a>for detailed information on how we handle your data.
                     </p>
-                    <ul class="list-disc ml-6 text-gray-600 space-y-2">
-                        <li>Access your personal information</li>
-                        <li>Request corrections to your data</li>
-                        <li>Delete your account</li>
-                        <li>Opt-out of marketing communications</li>
-                    </ul>
                 </section>
 
                 <!-- Cookies Section -->
                 <section>
-                    <h2 class="text-xl font-semibold text-gray-800 mb-4">6. Cookies and Tracking</h2>
+                    <h2 class="text-xl font-semibold text-gray-800 mb-4">6. Intellectual Property</h2>
                     <p class="text-gray-600 leading-relaxed">
-                        We use cookies and similar tracking technologies to improve your browsing experience,
-                        analyze site traffic, and understand where our visitors come from.
+                      All content, design, and features on Journyly are the intellectual property of Journyly and may not be reproduced, copied, or redistributed without prior permission.
                     </p>
+                </section>
+
+                <!-- Contact Section -->
+                <section>
+                    <h2 class="text-xl font-semibold text-gray-800 mb-4">7. Limitation of Liability</h2>
+                    <p class="text-gray-600 leading-relaxed">
+                    Journyly is not liable for any loss, damages, or disruptions caused by third-party providers, unforeseen circumstances, or incorrect user inputs.
+                    </p>
+                </section>
+
+                <!-- Contact Section -->
+                <section>
+                    <h2 class="text-xl font-semibold text-gray-800 mb-4">8. Changes to Terms</h2>
+                    <p class="text-gray-600 leading-relaxed">
+                    We reserve the right to modify these Terms and Conditions at any time. Changes will be effective immediately upon posting
+                    </p>
+                </section>
+                
+                <!-- FAQ Section -->
+                <section>
+                    <h2 class="text-xl font-semibold text-gray-800 mb-4">6. FAQ</h2>
+                    <p class="text-gray-600 leading-relaxed mb-2">
+                    1. What can I do on Journyly?
+                    Journyly allows you to explore destinations, book hotels and flights, connect with tour guides, and create personalized travel itineraries.</p>
+                    <p class="text-gray-600 leading-relaxed mb-2">
+                    2. How do I book a hotel or flight?
+                    You can use the integrated booking system on Journyly to reserve accommodations and flights directly through the platform.</p>
+                    <p class="text-gray-600 leading-relaxed mb-2">
+                    3. Is my payment information secure?
+                    Yes, we use secure encryption methods and payment processors to ensure that your payment information is protected during transactions.</p>
+                    <p class="text-gray-600 leading-relaxed mb-2">
+                    4. What is the cancellation policy?
+                    Cancellations and refunds are subject to the policies of the service provider you booked with (e.g., airlines, hotels). Please review their terms before booking.</p>
+                    <p class="text-gray-600 leading-relaxed mb-2">
+                    5. Can I find local tour guides on Journyly?
+                    Yes, Journyly provides detailed profiles of local tour guides, including their language skills, specialization, and user ratings. You can book them directly through the platform.</p>
+                    <p class="text-gray-600 leading-relaxed mb-2">
+                    6. How do I contact customer support?
+                    You can contact our support team via email at support@journyly.com or by calling +880 1234-567890.</p>
+                    <p class="text-gray-600 leading-relaxed mb-2">
+                    7. Is my personal information safe?
+                    Absolutely. We implement robust security measures to protect your data. Refer to our
+                    <a class="text-blue-500 bg-blue-100" href="{{ route('privacy') }}">Privacy&Policy </a>for more details.</p>
+                    <p class="text-gray-600 leading-relaxed mb-2">
+                    8. How do I update my account details?
+                    You can update your account details, in the "profile/user info" section.</p>
                 </section>
 
                 <!-- Contact Section -->
@@ -200,6 +238,7 @@
                         <li>Address: Dhaka, Bangladesh</li>
                     </ul>
                 </section>
+                
             </div>
         </div>
     </main>

@@ -7,6 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://kit.fontawesome.com/4b5d033142.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     @vite('resources/css/app.css')
 </head>
 <body class="min-h-screen bg-gradient-to-br from-blue-200 via-blue-50 to-transparent">
@@ -178,6 +179,7 @@
                                     <th class="py-3 px-4 text-left">Total</th>
                                     <th class="py-3 px-4 text-left">Status</th>
                                     <th class="py-3 px-4 text-left">Action</th>
+                                    <th class="py-3 px-4 text-left">Notification</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-100">
@@ -207,11 +209,19 @@
                                                 class="inline-block">
                                                 @csrf
                                                 @method('PATCH')
-                                                <button type="submit" class="text-blue-500 hover:text-blue-700 mr-2" title="Mark as Paid">
+                                                <button type="submit" class="text-blue-500 hover:text-blue-700" title="Mark as Paid">
                                                     <i class="fa-solid fa-check"></i>
                                                 </button>
                                             </form>
                                         @endif
+                                    </td>
+                                    <td class="py-3 px-4">
+                                        <button 
+                                            onclick="openNotificationModal('{{ $booking->id }}', '{{ $booking->user_name }}')"
+                                            class="text-blue-500 hover:text-blue-700" 
+                                            title="Send Notification">
+                                            <i class="fa-solid fa-bell"></i>
+                                        </button>
                                     </td>
                                 </tr>
                                 @endforeach
@@ -219,6 +229,39 @@
                         </table>
                     </div> 
                 @endif
+            </div>
+        </div>
+
+        <!-- Global Notification Modal -->
+        <div id="notificationModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden overflow-y-auto h-full w-full z-50">
+            <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+                <div class="mt-3">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-medium text-gray-900" id="modalTitle">Send Notification</h3>
+                        <button onclick="closeNotificationModal()" class="text-gray-500 hover:text-gray-700">
+                            <i class="fa-solid fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="mt-2">
+                        <textarea 
+                            id="notificationMessage" 
+                            class="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            rows="4"
+                            placeholder="Enter your message here..."></textarea>
+                    </div>
+                    <div class="flex justify-end mt-4 gap-3">
+                        <button 
+                            onclick="closeNotificationModal()"
+                            class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition-colors">
+                            Cancel
+                        </button>
+                        <button 
+                            id="sendNotificationBtn"
+                            class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors">
+                            Send
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -233,19 +276,19 @@
                 <!-- Statistics Cards -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                     <!-- Total Buses Card -->
-                    <div class="bg-blue-50 p-6 rounded-xl shadow">
+                    <div class="bg-blue-50 p-6 rounded-xl shadow hover:text-blue-100 transition-scale duration-300 ease-in-out hover:scale-95">
                         <h3 class="text-gray-700 text-lg font-medium mb-2">Total Buses</h3>
                         <p class="text-4xl font-bold text-blue-600">{{ $stats['total_buses'] }}</p>
                     </div>
 
                     <!-- Total Bookings Card -->
-                    <div class="bg-blue-50 p-6 rounded-xl shadow">
+                    <div class="bg-blue-50 p-6 rounded-xl shadow hover:text-blue-100 transition-scale duration-300 ease-in-out hover:scale-95">
                         <h3 class="text-gray-700 text-lg font-medium mb-2">Total Bookings</h3>
                         <p class="text-4xl font-bold text-blue-600">{{ $stats['total_bookings'] }}</p>
                     </div>
 
                     <!-- Total Revenue Card -->
-                    <div class="bg-blue-50 p-6 rounded-xl shadow">
+                    <div class="bg-blue-50 p-6 rounded-xl shadow hover:text-blue-100 transition-scale duration-300 ease-in-out hover:scale-95">
                         <h3 class="text-gray-700 text-lg font-medium mb-2">Total Revenue</h3>
                         <p class="text-4xl font-bold text-blue-600">
                             BDT {{ number_format($stats['total_revenue'], 2) }}৳
@@ -280,6 +323,43 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <!-- Global Notification Modal -->
+        <div id="notificationModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden overflow-y-auto h-full w-full z-50">
+            <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+                <div class="mt-3">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-medium text-gray-900" id="modalTitle">Send Notification</h3>
+                        <button onclick="closeNotificationModal()" class="text-gray-500 hover:text-gray-700">
+                            <i class="fa-solid fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="mt-2">
+                        <textarea 
+                            id="notificationMessage" 
+                            class="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            rows="4"
+                            placeholder="Enter your message here..."></textarea>
+                    </div>
+                    <div class="flex justify-end mt-4 gap-3">
+                        <button 
+                            onclick="closeNotificationModal()"
+                            class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition-colors">
+                            Cancel
+                        </button>
+                        <button 
+                            id="sendNotificationBtn"
+                            class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors">
+                            Send
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Success Toast Notification -->
+        <div id="successToast" class="fixed bottom-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg transform translate-y-full opacity-0 transition-all duration-300 hidden">
+            Notification sent successfully!
         </div>
 
 <script>
@@ -501,6 +581,85 @@ document.addEventListener('DOMContentLoaded', function() {
     showSection('busList');
 });
 </script>
+<!-- Add this JavaScript code at the bottom of your file, just before </body> tag -->
+<script>
+    let currentBookingId = null;
 
+function openNotificationModal(bookingId, userName) {
+    currentBookingId = bookingId;
+    const modal = document.getElementById('notificationModal');
+    const modalTitle = document.getElementById('modalTitle');
+    modalTitle.textContent = `Send Notification to ${userName}`;
+    modal.classList.remove('hidden');
+    document.getElementById('notificationMessage').value = '';
+}
+
+function closeNotificationModal() {
+    document.getElementById('notificationModal').classList.add('hidden');
+    document.getElementById('notificationMessage').value = ''; // Clear the message
+    currentBookingId = null;
+}
+
+function showSuccessToast() {
+    const toast = document.getElementById('successToast');
+    toast.classList.remove('hidden');
+    toast.classList.remove('translate-y-full', 'opacity-0');
+   
+    setTimeout(() => {
+        toast.classList.add('translate-y-full', 'opacity-0');
+        setTimeout(() => {
+            toast.classList.add('hidden');
+        }, 300);
+    }, 3000);
+}
+
+document.getElementById('sendNotificationBtn').addEventListener('click', function() {
+    if (!currentBookingId) {
+        console.error('No booking ID found');
+        return;
+    }
+   
+    const message = document.getElementById('notificationMessage').value.trim();
+    if (!message) {
+        alert('Please enter a message');
+        return;
+    }
+
+    console.log('Sending notification:', {
+        bookingId: currentBookingId,
+        message: message
+    });
+
+    fetch(`/admin/send-notification/${currentBookingId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+        },
+        body: JSON.stringify({ message })
+    })
+    .then(async response => {
+        console.log('Response status:', response.status);
+        const data = await response.json();
+        console.log('Response data:', data);
+        return { ok: response.ok, data };
+    })
+    .then(({ ok, data }) => {
+        if (ok && data.success) {
+            // Only close modal and show toast on success
+            closeNotificationModal();
+            showSuccessToast();
+        } else {
+            throw new Error(data.message || 'Failed to send notification');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        // Reopen modal if there was an error
+        openNotificationModal(currentBookingId, document.getElementById('modalTitle').textContent.replace('Send Notification to ', ''));
+        alert(error.message || 'An error occurred while sending the notification');
+    });
+});
+</script>         
 </body>
 </html>

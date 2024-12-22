@@ -253,276 +253,276 @@
             <div id="flight-listings"></div>
                 <script>
                     $(document).ready(function() {
-    // Setup CSRF token for all AJAX requests
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-    });
+                        // Setup CSRF token for all AJAX requests
+                        $.ajaxSetup({
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            }
+                        });
 
-    // Check if user is authenticated
-    const isAuthenticated = {{ Auth::check() ? 'true' : 'false' }};
+                        // Check if user is authenticated
+                        const isAuthenticated = {{ Auth::check() ? 'true' : 'false' }};
 
-    let currentSort = '';
-    let selectedDepartureSlots = [];
-    let selectedArrivalSlots = [];
+                        let currentSort = '';
+                        let selectedDepartureSlots = [];
+                        let selectedArrivalSlots = [];
 
-    // Function to show loading state
-    function showLoading() {
-        $('#flight-listings').html(`
-            <div class="text-center py-8">
-                <p class="text-gray-500">Loading flights...</p>
-            </div>
-        `);
-    }
-
-    // Handle time slot button clicks for departure
-    $('button[name="departure_time_slots[]"]').click(function(e) {
-        e.preventDefault();
-        $(this).toggleClass('bg-blue-400');
-        const value = $(this).val();
-        const index = selectedDepartureSlots.indexOf(value);
-        if (index === -1) {
-            selectedDepartureSlots.push(value);
-        } else {
-            selectedDepartureSlots.splice(index, 1);
-        }
-        searchFlights();
-    });
-
-    // Handle time slot button clicks for arrival
-    $('button[name="arrival_time_slots[]"]').click(function(e) {
-        e.preventDefault();
-        $(this).toggleClass('bg-blue-400');
-        const value = $(this).val();
-        const index = selectedArrivalSlots.indexOf(value);
-        if (index === -1) {
-            selectedArrivalSlots.push(value);
-        } else {
-            selectedArrivalSlots.splice(index, 1);
-        }
-        searchFlights();
-    });
-
-    // Main search function
-    function searchFlights() {
-        showLoading();
-
-        // Collect all search parameters
-        const searchData = {
-            from: $('#fromInput').val(),
-            to: $('#toInput').val(),
-            departure_date: $('#departureDate').val(),
-            return_date: $('#returnDate').val(),
-            
-            // Get selected flight classes
-            flight_class: $('input[name="flight_class[]"]:checked').map(function() {
-                return $(this).val();
-            }).get(),
-            
-            // Get selected airlines
-            airlines: $('input[name="airlines[]"]:checked').map(function() {
-                return $(this).val();
-            }).get(),
-            
-            // Get selected baggage allowances
-            baggage_allowance: $('input[name="baggage_allowance[]"]:checked').map(function() {
-                return parseInt($(this).val());
-            }).get(),
-            
-            // Time slots
-            departure_time_slots: selectedDepartureSlots,
-            arrival_time_slots: selectedArrivalSlots,
-            
-            // Price range
-            max_price: $('#price-range').val(),
-            
-            // Sorting
-            sort: currentSort
-        };
-
-        // Log search parameters for debugging
-        console.log('Search parameters:', searchData);
-
-        $.ajax({
-            url: "{{ route('account.flight.search') }}",
-            type: "GET",
-            data: searchData,
-            success: function(response) {
-                console.log('Search response:', response);
-                
-                if (!response || response.length === 0) {
-                    $('#flight-listings').html(`
-                        <div class="text-center py-8">
-                            <p class="text-gray-500">No flights found matching your criteria</p>
-                        </div>
-                    `);
-                    return;
-                }
-
-                const html = response.map(flight => generateFlightCard(flight)).join('');
-                $('#flight-listings').html(html);
-                
-                // Update flight count
-                $('.flight-count').text(`${response.length} Available Flights`);
-            },
-            error: function(xhr, status, error) {
-                console.error('Search error:', {xhr, status, error});
-                $('#flight-listings').html(`
-                    <div class="text-center py-8">
-                        <p class="text-red-500 mb-2">Unable to load flight data</p>
-                        <p class="text-sm text-gray-500 mb-2">${error}</p>
-                        <button onclick="searchFlights()" class="text-blue-500 hover:underline">
-                            Try Again
-                        </button>
-                    </div>
-                `);
-            }
-        });
-    }
-
-    // Generate HTML for a flight card
-    function generateFlightCard(flight) {
-        // Format the time slots for display
-        const departureTime = flight.getReadableDepartureTime || formatTimeSlot(flight.departure_time_slot);
-        const arrivalTime = flight.getReadableArrivalTime || formatTimeSlot(flight.arrival_time_slot);
-
-        // Generate the booking URL using the route helper
-        const bookingUrl = `{{ route('flight.book', '') }}/${flight.id}`;
-
-        return `
-            <div class="flight-card border rounded-md p-4 mb-4 shadow-md bg-gradient-to-br from-blue-200 via-blue-50 to-transparent hover:scale-x-95 transition-all duration-300">
-                <div class="flex flex-wrap md:flex-nowrap items-center gap-4">
-                    <img src="${flight.airline_logo || '/default-airline-logo.png'}" alt="${flight.airline_name}" 
-                        class="w-12 h-12 object-contain">
-            
-                    <div class="flex-1">
-                        <h3 class="font-semibold">${flight.airline_name}</h3>
-                        <p class="text-sm text-gray-500">Flight: ${flight.flight_number}</p>
-                        <p class="text-sm text-gray-500">Class: ${flight.flight_class}</p>
-                        <p class="text-sm text-gray-500">Baggage: ${flight.baggage_allowance}kg</p>
-                    </div>
-
-                    <div class="text-center">
-                        <p class="text-gray-800 font-semibold">${departureTime}</p>
-                        <p class="text-sm text-gray-500">${flight.from_location}</p>
-                    </div>
-
-                    <div class="text-center px-4">
-                        <i class="fas fa-plane text-gray-400"></i>
-                    </div>
-
-                    <div class="text-center">
-                        <p class="text-gray-800 font-semibold">${arrivalTime}</p>
-                        <p class="text-sm text-gray-500">${flight.to_location}</p>
-                    </div>
-
-                    <div class="text-right">
-                        ${parseFloat(flight.original_price) > parseFloat(flight.discounted_price) ? 
-                            `<p class="text-gray-500 line-through">BDT ${flight.original_price}৳</p>` : ''}
-                        <p class="text-lg text-red-500 font-semibold">BDT ${flight.discounted_price}৳</p>
-                        <p class="text-sm ${flight.available_seats < 5 ? 'text-red-500' : 'text-gray-500'}">
-                            ${flight.available_seats} Seats Available
-                        </p>
-
-                        ${flight.available_seats > 0 ? 
-                            isAuthenticated ?
-                                `<form action="${bookingUrl}" method="GET">
-                                    <input type="hidden" name="flight_price" value="${flight.discounted_price}">
-                                    <input type="hidden" name="departure_date" value="${flight.departure_date}">
-                                    <input type="hidden" name="return_date" value="${flight.return_date || ''}">
-                                    <button type="submit" 
-                                            class="mt-2 bg-sky-500 text-white px-4 py-1 rounded-md hover:bg-sky-600 hover:scale-105 transition-all duration-300 w-full">
-                                        Book Ticket
-                                    </button>
-                                </form>`
-                                :
-                                `<a href="{{ route('account.login') }}" class="block">
-                                    <button class="mt-2 bg-sky-500 text-white px-4 py-1 rounded-md hover:bg-sky-600 hover:scale-105 transition-all duration-300 w-full">
-                                        Book Ticket
-                                    </button>
-                                </a>`
-                            : 
-                            `<button disabled 
-                                    class="mt-2 bg-gray-400 text-white px-4 py-1 rounded-md w-full cursor-not-allowed">
-                                Sold Out
-                            </button>`
+                        // Function to show loading state
+                        function showLoading() {
+                            $('#flight-listings').html(`
+                                <div class="text-center py-8">
+                                    <p class="text-gray-500">Loading flights...</p>
+                                </div>
+                            `);
                         }
-                    </div>
-                </div>
-            </div>
-        `;
-    }
 
-    // Helper function to format time slots
-    function formatTimeSlot(slot) {
-        const slots = {
-            '12am_6am': '12am - 6am',
-            '6am_12pm': '6am - 12pm',
-            '12pm_6pm': '12pm - 6pm',
-            '6pm_12am': '6pm - 12am'
-        };
-        return slots[slot] || slot;
-    }
+                        // Handle time slot button clicks for departure
+                        $('button[name="departure_time_slots[]"]').click(function(e) {
+                            e.preventDefault();
+                            $(this).toggleClass('bg-blue-400');
+                            const value = $(this).val();
+                            const index = selectedDepartureSlots.indexOf(value);
+                            if (index === -1) {
+                                selectedDepartureSlots.push(value);
+                            } else {
+                                selectedDepartureSlots.splice(index, 1);
+                            }
+                            searchFlights();
+                        });
 
-    // Event Listeners
-    $('#searchBtn').click(function(e) {
-        e.preventDefault();
-        searchFlights();
-    });
+                        // Handle time slot button clicks for arrival
+                        $('button[name="arrival_time_slots[]"]').click(function(e) {
+                            e.preventDefault();
+                            $(this).toggleClass('bg-blue-400');
+                            const value = $(this).val();
+                            const index = selectedArrivalSlots.indexOf(value);
+                            if (index === -1) {
+                                selectedArrivalSlots.push(value);
+                            } else {
+                                selectedArrivalSlots.splice(index, 1);
+                            }
+                            searchFlights();
+                        });
 
-    $('.sort-btn').click(function() {
-        const sortType = $(this).data('sort');
-        currentSort = sortType;
-        $('.sort-btn').removeClass('bg-blue-500 text-white').addClass('bg-blue-300');
-        $(this).removeClass('bg-blue-300').addClass('bg-blue-500 text-white');
-        searchFlights();
-    });
+                        // Main search function
+                        function searchFlights() {
+                            showLoading();
 
-    // Reset functionality
-    $('.reset-btn').click(function() {
-        // Reset form inputs
-        $('input[type="checkbox"]').prop('checked', false);
-        $('#fromInput, #toInput').val('');
-        $('#departureDate, #returnDate').val('');
-        $('#price-range').val(500000);
-        updatePrice(500000);
+                            // Collect all search parameters
+                            const searchData = {
+                                from: $('#fromInput').val(),
+                                to: $('#toInput').val(),
+                                departure_date: $('#departureDate').val(),
+                                return_date: $('#returnDate').val(),
+            
+                                // Get selected flight classes
+                                flight_class: $('input[name="flight_class[]"]:checked').map(function() {
+                                    return $(this).val();
+                                }).get(),
+            
+                                // Get selected airlines
+                                airlines: $('input[name="airlines[]"]:checked').map(function() {
+                                    return $(this).val();
+                                }).get(),
+            
+                                // Get selected baggage allowances
+                                baggage_allowance: $('input[name="baggage_allowance[]"]:checked').map(function() {
+                                    return parseInt($(this).val());
+                                }).get(),
+            
+                                // Time slots
+                                departure_time_slots: selectedDepartureSlots,
+                                arrival_time_slots: selectedArrivalSlots,
+            
+                                // Price range
+                                max_price: $('#price-range').val(),
+            
+                                // Sorting
+                                sort: currentSort
+                            };
+
+                            // Log search parameters for debugging
+                            console.log('Search parameters:', searchData);
+
+                            $.ajax({
+                                url: "{{ route('account.flight.search') }}",
+                                type: "GET",
+                                data: searchData,
+                                success: function(response) {
+                                    console.log('Search response:', response);
+                
+                                    if (!response || response.length === 0) {
+                                        $('#flight-listings').html(`
+                                            <div class="text-center py-8">
+                                                <p class="text-gray-500">No flights found matching your criteria</p>
+                                            </div>
+                                        `);
+                                        return;
+                                    }
+
+                                    const html = response.map(flight => generateFlightCard(flight)).join('');
+                                    $('#flight-listings').html(html);
+                
+                                    // Update flight count
+                                    $('.flight-count').text(`${response.length} Available Flights`);
+                                },
+                                error: function(xhr, status, error) {
+                                    console.error('Search error:', {xhr, status, error});
+                                    $('#flight-listings').html(`
+                                        <div class="text-center py-8">
+                                            <p class="text-red-500 mb-2">Unable to load flight data</p>
+                                            <p class="text-sm text-gray-500 mb-2">${error}</p>
+                                            <button onclick="searchFlights()" class="text-blue-500 hover:underline">
+                                                Try Again
+                                            </button>
+                                        </div>
+                                    `);
+                            }
+                            });
+                        }
+
+                        // Generate HTML for a flight card
+                        function generateFlightCard(flight) {
+                            // Format the time slots for display
+                            const departureTime = flight.getReadableDepartureTime || formatTimeSlot(flight.departure_time_slot);
+                            const arrivalTime = flight.getReadableArrivalTime || formatTimeSlot(flight.arrival_time_slot);
+
+                            // Generate the booking URL using the route helper
+                            const bookingUrl = `{{ route('flight.book', '') }}/${flight.id}`;
+
+                            return `
+                                <div class="flight-card border rounded-md p-4 mb-4 shadow-md bg-gradient-to-br from-blue-200 via-blue-50 to-transparent hover:scale-x-95 transition-all duration-300">
+                                    <div class="flex flex-wrap md:flex-nowrap items-center gap-4">
+                                        <img src="${flight.airline_logo || '/default-airline-logo.png'}" alt="${flight.airline_name}" 
+                                            class="w-12 h-12 object-contain">
+            
+                                        <div class="flex-1">
+                                            <h3 class="font-semibold">${flight.airline_name}</h3>
+                                            <p class="text-sm text-gray-500">Flight: ${flight.flight_number}</p>
+                                            <p class="text-sm text-gray-500">Class: ${flight.flight_class}</p>
+                                            <p class="text-sm text-gray-500">Baggage: ${flight.baggage_allowance}kg</p>
+                                        </div>
+
+                                        <div class="text-center">
+                                            <p class="text-gray-800 font-semibold">${departureTime}</p>
+                                            <p class="text-sm text-gray-500">${flight.from_location}</p>
+                                        </div>
+
+                                        <div class="text-center px-4">
+                                            <i class="fas fa-plane text-gray-400"></i>
+                                        </div>
+
+                                        <div class="text-center">
+                                            <p class="text-gray-800 font-semibold">${arrivalTime}</p>
+                                            <p class="text-sm text-gray-500">${flight.to_location}</p>
+                                        </div>
+
+                                        <div class="text-right">
+                                            ${parseFloat(flight.original_price) > parseFloat(flight.discounted_price) ? 
+                                                `<p class="text-gray-500 line-through">BDT ${flight.original_price}৳</p>` : ''}
+                                            <p class="text-lg text-red-500 font-semibold">BDT ${flight.discounted_price}৳</p>
+                                            <p class="text-sm ${flight.available_seats < 5 ? 'text-red-500' : 'text-gray-500'}">
+                                                ${flight.available_seats} Seats Available
+                                            </p>
+
+                                            ${flight.available_seats > 0 ? 
+                                                isAuthenticated ?
+                                                    `<form action="${bookingUrl}" method="GET">
+                                                        <input type="hidden" name="flight_price" value="${flight.discounted_price}">
+                                                        <input type="hidden" name="departure_date" value="${flight.departure_date}">
+                                                        <input type="hidden" name="return_date" value="${flight.return_date || ''}">
+                                                        <button type="submit" 
+                                                                class="mt-2 bg-sky-500 text-white px-4 py-1 rounded-md hover:bg-sky-600 hover:scale-105 transition-all duration-300 w-full">
+                                                            Book Ticket
+                                                        </button>
+                                                    </form>`
+                                                    :
+                                                    `<a href="{{ route('account.login') }}" class="block">
+                                                        <button class="mt-2 bg-sky-500 text-white px-4 py-1 rounded-md hover:bg-sky-600 hover:scale-105 transition-all duration-300 w-full">
+                                                            Book Ticket
+                                                        </button>
+                                                    </a>`
+                                                : 
+                                                `<button disabled 
+                                                        class="mt-2 bg-gray-400 text-white px-4 py-1 rounded-md w-full cursor-not-allowed">
+                                                    Sold Out
+                                                </button>`
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                        }
+
+                        // Helper function to format time slots
+                        function formatTimeSlot(slot) {
+                            const slots = {
+                                '12am_6am': '12am - 6am',
+                                '6am_12pm': '6am - 12pm',
+                                '12pm_6pm': '12pm - 6pm',
+                                '6pm_12am': '6pm - 12am'
+                            };
+                            return slots[slot] || slot;
+                        }
+
+                        // Event Listeners
+                        $('#searchBtn').click(function(e) {
+                            e.preventDefault();
+                            searchFlights();
+                        });
+
+                        $('.sort-btn').click(function() {
+                            const sortType = $(this).data('sort');
+                            currentSort = sortType;
+                            $('.sort-btn').removeClass('bg-blue-500 text-white').addClass('bg-blue-300');
+                            $(this).removeClass('bg-blue-300').addClass('bg-blue-500 text-white');
+                            searchFlights();
+                        });
+
+                        // Reset functionality
+                        $('.reset-btn').click(function() {
+                            // Reset form inputs
+                            $('input[type="checkbox"]').prop('checked', false);
+                            $('#fromInput, #toInput').val('');
+                            $('#departureDate, #returnDate').val('');
+                            $('#price-range').val(500000);
+                            updatePrice(500000);
         
-        // Reset time slots
-        selectedDepartureSlots = [];
-        selectedArrivalSlots = [];
-        $('button[name="departure_time_slots[]"], button[name="arrival_time_slots[]"]')
-            .removeClass('bg-blue-400');
+                            // Reset time slots
+                            selectedDepartureSlots = [];
+                            selectedArrivalSlots = [];
+                            $('button[name="departure_time_slots[]"], button[name="arrival_time_slots[]"]')
+                                .removeClass('bg-blue-400');
         
-        // Reset sort
-        currentSort = '';
-        $('.sort-btn').removeClass('bg-blue-500 text-white').addClass('bg-blue-300');
+                            // Reset sort
+                            currentSort = '';
+                            $('.sort-btn').removeClass('bg-blue-500 text-white').addClass('bg-blue-300');
         
-        // Trigger search
-        searchFlights();
-    });
+                            // Trigger search
+                            searchFlights();
+                        });
 
-    // Watch for changes on all filter inputs
-    $('input[type="checkbox"], #price-range').on('change', searchFlights);
-    $('#fromInput, #toInput').on('keyup', debounce(searchFlights, 500));
-    $('#departureDate, #returnDate').on('change', searchFlights);
+                        // Watch for changes on all filter inputs
+                        $('input[type="checkbox"], #price-range').on('change', searchFlights);
+                        $('#fromInput, #toInput').on('keyup', debounce(searchFlights, 500));
+                        $('#departureDate, #returnDate').on('change', searchFlights);
 
-    // Debounce function to limit API calls
-    function debounce(func, wait) {
-        let timeout;
-        return function executedFunction(...args) {
-            const later = () => {
-                clearTimeout(timeout);
-                func(...args);
-            };
-            clearTimeout(timeout);
-            timeout = setTimeout(later, wait);
-        };
-    }
+                        // Debounce function to limit API calls
+                        function debounce(func, wait) {
+                            let timeout;
+                            return function executedFunction(...args) {
+                                const later = () => {
+                                    clearTimeout(timeout);
+                                    func(...args);
+                                };
+                                clearTimeout(timeout);
+                                timeout = setTimeout(later, wait);
+                            };
+                        }
 
-    // Initial search
-    searchFlights();
-});
+                        // Initial search
+                        searchFlights();
+                    });
                 </script>
 
             </div>   
