@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Profile</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://kit.fontawesome.com/4b5d033142.js" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
@@ -36,10 +37,16 @@
                     <i class="fa-solid fa-user"></i>
                 </div>User info
             </div>
-            <div role="button" tabindex="0" class="flex items-center w-full p-3 rounded-lg text-start leading-tight transition-all hover:bg-blue-100 hover:bg-opacity-80 focus:bg-blue-200 focus:bg-opacity-80 active:bg-gray-50 active:bg-opacity-80 hover:text-blue-900 focus:text-blue-900 active:text-blue-900 outline-none">
+            <div role="button" tabindex="0" class="flex items-center w-full p-3 rounded-lg text-start leading-tight transition-all hover:bg-blue-100 hover:bg-opacity-80 focus:bg-blue-200 focus:bg-opacity-80 active:bg-blue-50 active:bg-opacity-80 hover:text-blue-900 focus:text-blue-900 active:text-blue-900 outline-none">
                 <div class="grid place-items-center mr-4">
                     <i class="fa-solid fa-inbox"></i>
-                </div>inbox    
+                </div>
+                <span>Inbox</span>
+                @if(isset($unreadNotificationsCount) && $unreadNotificationsCount > 0)
+                    <span class="ml-24 bg-blue-500 text-white text-xs px-2 py-1 rounded-full">
+                        {{ $unreadNotificationsCount }}
+                    </span>
+                @endif
             </div>
             <div role="button" tabindex="0" class="flex items-center w-full p-3 rounded-lg text-start leading-tight transition-all hover:bg-blue-100 hover:bg-opacity-80 focus:bg-blue-200 focus:bg-opacity-80 active:bg-blue-50 active:bg-opacity-80 hover:text-blue-900 focus:text-blue-900 active:text-blue-900 outline-none">
               <div class="grid place-items-center mr-4">
@@ -226,7 +233,57 @@
                 </div>
             </form>
         </div>
-    </div><!--inbox--><div>
+    </div>
+    <!--inbox-->
+    <div id="inboxSection" class="min-h-screen p-4 hidden">
+        <div class="bg-white rounded-xl p-6 lg:p-8 shadow-lg w-full max-w-4xl mx-auto mt-60">
+            <div class="flex items-center mb-6">
+                <i class="fa-solid fa-inbox text-3xl text-blue-500 mr-4"></i>
+                <h2 class="text-2xl font-semibold text-blue-900">Inbox</h2>
+            </div>
+
+            <!-- Debug information (remove in production) -->
+            @if(isset($notifications))
+                <div class="mb-4 text-sm text-gray-500">
+                    Total notifications: {{ $notifications->count() }}
+                </div>
+            @endif
+
+            @if(!isset($notifications))
+                <div class="text-center py-8 text-gray-500">
+                    <i class="fa-solid fa-triangle-exclamation text-4xl mb-4"></i>
+                    <p>Error loading notifications</p>
+                </div>
+            @elseif($notifications->isEmpty())
+                <div class="text-center py-8 text-gray-500">
+                    <i class="fa-solid fa-bell-slash text-4xl mb-4"></i>
+                    <p>No notifications found</p>
+                </div>
+            @else
+                <div class="space-y-4">
+                    @foreach($notifications as $notification)
+                        <div class="p-4 rounded-lg border {{ $notification->is_read ? 'bg-gray-50' : 'bg-blue-50' }} transition-all duration-200">
+                            <div class="flex items-start justify-between">
+                                <div class="flex-1">
+                                    <p class="text-gray-800">{{ $notification->message }}</p>
+                                    <p class="text-sm text-gray-500 mt-1">
+                                        {{ $notification->created_at->diffForHumans() }}
+                                    </p>
+                                </div>
+                                @if(!$notification->is_read)
+                                    <button 
+                                        onclick="markAsRead({{ $notification->id }})"
+                                        class="text-blue-500 hover:text-blue-700 text-sm">
+                                        Mark as read
+                                    </button>
+                                @endif
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            @endif
+        </div>
+    </div>
     <div><!--hotel history--></div>
     <!--flight history-->
     <div id="flightHistorySection" class="min-h-screen p-4 flex items-center justify-center">
@@ -449,124 +506,67 @@ function toggleEditMode() {
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Element selectors
     const sidebar = document.getElementById('sidebar');
     const mobileMenuBtn = document.getElementById('mobileMenuBtn');
     const sidebarButtons = document.querySelectorAll('[role="button"]');
     const sections = {
-        profile: document.getElementById('profileSection'),
-        bus: document.getElementById('busHistorySection'),
-        flight: document.getElementById('flightHistorySection'),
-        inbox: document.getElementById('inboxSection'),
-        hotel: document.getElementById('hotelHistorySection'),
-        train: document.getElementById('trainHistorySection')
+        'user info': document.getElementById('profileSection'),
+        'inbox': document.getElementById('inboxSection'),
+        'hotel history': document.getElementById('hotelHistorySection'),
+        'flight history': document.getElementById('flightHistorySection'),
+        'bus history': document.getElementById('busHistorySection'),
+        'train history': document.getElementById('trainHistorySection')
     };
 
-    // Initial setup
-    initializePage();
+    // Initially show profile section and hide others
+    Object.values(sections).forEach(section => {
+        if (section) {
+            section.classList.add('hidden');
+        }
+    });
+    sections['user info'].classList.remove('hidden');
 
-    // Mobile menu toggle
-    mobileMenuBtn.addEventListener('click', toggleMobileMenu);
-
-    // Outside click handler for mobile
-    document.addEventListener('click', handleOutsideClick);
-
-    // Sidebar navigation
+    // Add click event listeners to sidebar buttons
     sidebarButtons.forEach(button => {
-        button.addEventListener('click', handleNavigation);
+        button.addEventListener('click', function() {
+            const buttonText = this.textContent.trim().toLowerCase();
+            
+            // Hide all sections
+            Object.values(sections).forEach(section => {
+                if (section) {
+                    section.classList.add('hidden');
+                }
+            });
+
+            // Show selected section
+            if (sections[buttonText]) {
+                sections[buttonText].classList.remove('hidden');
+            }
+
+            // Update active button state
+            sidebarButtons.forEach(btn => btn.classList.remove('bg-blue-100'));
+            this.classList.add('bg-blue-100');
+
+            // Close mobile menu if open
+            if (window.innerWidth < 1024) {
+                sidebar.classList.add('hidden');
+            }
+        });
     });
 
-    // Window resize handler
-    window.addEventListener('resize', handleResize);
-
-    // Initialize page state
-    function initializePage() {
-        hideAllSections();
-        sections.profile.classList.remove('hidden');
-        setActiveButton('user info');
-    }
-
-    // Toggle mobile menu
-    function toggleMobileMenu() {
+    // Mobile menu toggle
+    mobileMenuBtn.addEventListener('click', () => {
         sidebar.classList.toggle('hidden');
-    }
+    });
 
-    // Handle clicks outside sidebar on mobile
-    function handleOutsideClick(event) {
-        if (isMobileView() && !sidebar.contains(event.target) && !mobileMenuBtn.contains(event.target)) {
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', (event) => {
+        if (window.innerWidth < 1024 && 
+            !sidebar.contains(event.target) && 
+            !mobileMenuBtn.contains(event.target)) {
             sidebar.classList.add('hidden');
         }
-    }
-
-    // Handle sidebar navigation
-    function handleNavigation() {
-        const buttonText = this.textContent.trim().toLowerCase();
-        
-        // Update button states
-        updateButtonStates(this);
-        
-        // Update visible section
-        hideAllSections();
-        showSection(buttonText);
-        
-        // Handle mobile view
-        if (isMobileView()) {
-            sidebar.classList.add('hidden');
-        }
-    }
-
-    // Handle window resize
-    function handleResize() {
-        if (isMobileView()) {
-            sidebar.classList.add('hidden');
-        } else {
-            sidebar.classList.remove('hidden');
-        }
-    }
-
-    // Helper functions
-    function hideAllSections() {
-        Object.values(sections).forEach(section => {
-            if (section) {
-                section.classList.add('hidden');
-            }
-        });
-    }
-
-    function showSection(buttonText) {
-        const sectionMap = {
-            'user info': sections.profile,
-            'inbox': sections.inbox,
-            'hotel history': sections.hotel,
-            'flight history': sections.flight,
-            'bus history': sections.bus,
-            'train history': sections.train
-        };
-
-        const section = sectionMap[buttonText];
-        if (section) {
-            section.classList.remove('hidden');
-        }
-    }
-
-    function updateButtonStates(activeButton) {
-        sidebarButtons.forEach(btn => {
-            btn.classList.remove('bg-blue-100');
-        });
-        activeButton.classList.add('bg-blue-100');
-    }
-
-    function setActiveButton(buttonText) {
-        sidebarButtons.forEach(btn => {
-            if (btn.textContent.trim().toLowerCase() === buttonText) {
-                btn.classList.add('bg-blue-100');
-            }
-        });
-    }
-
-    function isMobileView() {
-        return window.innerWidth < 1024;
-    }
+    });
 });
 </script>
 <!--print script-->
@@ -782,6 +782,52 @@ function downloadFlightInvoice(bookingData) {
         alert('Error generating PDF. Please try again.');
     });
 }
+</script>
+
+<!-- Add this script section for handling notifications -->
+<script>
+function markAsRead(notificationId) {
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+    
+    fetch(`/account/notifications/${notificationId}/mark-read`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': csrfToken,
+            'Accept': 'application/json'
+        },
+        credentials: 'same-origin'
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            window.location.reload();
+        } else {
+            console.error('Error marking notification as read');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Failed to mark notification as read. Please try again.');
+    });
+}
+
+// When clicking inbox in sidebar, show inbox section
+document.addEventListener('DOMContentLoaded', function() {
+    const inboxButton = document.querySelector('[role="button"]:nth-child(2)');
+    const inboxSection = document.getElementById('inboxSection');
+    
+    if (inboxButton && inboxSection) {
+        inboxButton.addEventListener('click', function() {
+            // Hide all sections first
+            document.querySelectorAll('[id$="Section"]').forEach(section => {
+                section.classList.add('hidden');
+            });
+            // Show inbox section
+            inboxSection.classList.remove('hidden');
+        });
+    }
+});
 </script>
 
 </body>

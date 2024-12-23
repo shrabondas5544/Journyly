@@ -67,6 +67,11 @@ Route::post('/bus/book/{id}', [BusBookingController::class, 'store'])
     ->name('bus.book.store')
     ->middleware('auth');
 
+// Notification routes
+Route::post('/account/notifications/{id}/mark-read', [ProfileController::class, 'markNotificationAsRead'])
+    ->name('account.notifications.mark-read');
+    
+
 //hotel--------------------------------------------------------------------------------------------
 
 //user---------------------------------------------------------------------------------------------------------------------------------
@@ -116,7 +121,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::delete('/delete-bus/{bus}', [AdminBusController::class, 'destroy'])->name('delete-bus');
         Route::post('/send-notification/{booking}', [AdminBusController::class, 'sendNotification'])
             ->name('send-notification');
-            
+
         // Flight Panel routes
         Route::get('/flightpanel', [AdminFlightController::class, 'index'])->name('flightpanel');
         Route::get('/add-flight', [AdminFlightController::class, 'create'])->name('add-flight');
@@ -125,8 +130,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
             ->name('update-flight-booking-status');
         Route::delete('/delete-flight/{flight}', [AdminFlightController::class, 'destroy'])->name('delete-flight');
 
-        
-
+        Route::post('/send-flight-notification/{booking}', [AdminFlightController::class, 'sendNotification'])
+            ->name('send-flight-notification');
 
         });
     

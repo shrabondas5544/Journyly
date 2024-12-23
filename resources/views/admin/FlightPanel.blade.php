@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Flight Panel</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://kit.fontawesome.com/4b5d033142.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -169,6 +170,7 @@
                                     <th class="py-3 px-4 text-left">Total</th>
                                     <th class="py-3 px-4 text-left">Status</th>
                                     <th class="py-3 px-4 text-left">Action</th>
+                                    <th class="py-3 px-4 text-left">Notification</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-100">
@@ -204,6 +206,14 @@
                                             </form>
                                         @endif
                                     </td>
+                                    <td class="py-3 px-4">
+                                        <button 
+                                            onclick="openNotificationModal('{{ $booking->id }}', '{{ $booking->user_name }}')"
+                                            class="text-blue-500 hover:text-blue-700" 
+                                            title="Send Notification">
+                                            <i class="fa-solid fa-bell"></i>
+                                        </button>
+                                    </td>
                                 </tr>
                                 @endforeach
                             </tbody>
@@ -211,6 +221,43 @@
                     </div>
                 @endif
             </div>
+        </div>
+        <!-- Global Notification Modal -->
+        <div id="notificationModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden overflow-y-auto h-full w-full z-50">
+            <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+                <div class="mt-3">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-medium text-gray-900" id="modalTitle">Send Notification</h3>
+                        <button onclick="closeNotificationModal()" class="text-gray-500 hover:text-gray-700">
+                            <i class="fa-solid fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="mt-2">
+                        <textarea 
+                            id="notificationMessage" 
+                            class="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            rows="4"
+                            placeholder="Enter your message here..."></textarea>
+                    </div>
+                    <div class="flex justify-end mt-4 gap-3">
+                        <button 
+                            onclick="closeNotificationModal()"
+                            class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition-colors">
+                            Cancel
+                        </button>
+                        <button 
+                            id="sendNotificationBtn"
+                            class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors">
+                            Send
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Success Toast -->
+        <div id="successToast" class="fixed bottom-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg transform translate-y-full opacity-0 transition-all duration-300 hidden">
+            Notification sent successfully!
         </div>
 
         <!-- Statistics Section -->
@@ -480,5 +527,82 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
+
+<script>
+    let currentBookingId = null;
+
+function openNotificationModal(bookingId, userName) {
+    currentBookingId = bookingId;
+    const modal = document.getElementById('notificationModal');
+    const modalTitle = document.getElementById('modalTitle');
+    modalTitle.textContent = `Send Notification to ${userName}`;
+    modal.classList.remove('hidden');
+    document.getElementById('notificationMessage').value = '';
+}
+
+function closeNotificationModal() {
+    document.getElementById('notificationModal').classList.add('hidden');
+    document.getElementById('notificationMessage').value = '';
+    currentBookingId = null;
+}
+
+function showSuccessToast() {
+    const toast = document.getElementById('successToast');
+    toast.classList.remove('hidden');
+    toast.classList.remove('translate-y-full', 'opacity-0');
+   
+    setTimeout(() => {
+        toast.classList.add('translate-y-full', 'opacity-0');
+        setTimeout(() => {
+            toast.classList.add('hidden');
+        }, 300);
+    }, 3000);
+}
+
+document.getElementById('sendNotificationBtn').addEventListener('click', function() {
+    if (!currentBookingId) {
+        console.error('No booking ID found');
+        return;
+    }
+   
+    const message = document.getElementById('notificationMessage').value.trim();
+    if (!message) {
+        alert('Please enter a message');
+        return;
+    }
+
+    console.log('Sending notification:', {
+        bookingId: currentBookingId,
+        message: message
+    });
+
+    fetch(`/admin/send-flight-notification/${currentBookingId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+        },
+        body: JSON.stringify({ message })
+    })
+    .then(async response => {
+        console.log('Response status:', response.status);
+        const data = await response.json();
+        console.log('Response data:', data);
+        return { ok: response.ok, data };
+    })
+    .then(({ ok, data }) => {
+        if (ok && data.success) {
+            closeNotificationModal();
+            showSuccessToast();
+        } else {
+            throw new Error(data.message || 'Failed to send notification');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while sending the notification');
+    });
+});
+</script>
 </body>
 </html>

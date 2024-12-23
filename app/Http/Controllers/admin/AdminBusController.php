@@ -117,48 +117,35 @@ class AdminBusController extends Controller
     }
 
     public function sendNotification(Request $request, $bookingId)
-{
-    try {
-        // Use findOrFail to throw an exception if booking not found
-        $booking = BusBooking::with('user')->findOrFail($bookingId);
+    {
+        try {
+            $booking = BusBooking::findOrFail($bookingId);
         
-        if (!$booking) {
-            \Log::error('Booking not found:', ['booking_id' => $bookingId]);
+            $validated = $request->validate([
+                'message' => 'required|string|max:500'
+            ]);
+
+            $notification = Notification::create([
+                'user_id' => $booking->user_id,
+                'message' => $validated['message']
+            ]);
+
+            \Log::info('Notification created:', ['notification_id' => $notification->id, 'user_id' => $booking->user_id]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Notification sent successfully'
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('Error sending notification:', [
+                'error' => $e->getMessage(),
+                'booking_id' => $bookingId
+            ]);
+
             return response()->json([
                 'success' => false,
-                'message' => 'Booking not found'
-            ], 404);
+                'message' => 'Failed to send notification: ' . $e->getMessage()
+            ], 500);
         }
-
-        $validated = $request->validate([
-            'message' => 'required|string|max:500'
-        ]);
-
-        $notification = Notification::create([
-            'user_id' => $booking->user->id, // Make sure to get the user ID correctly
-            'message' => $validated['message']
-        ]);
-
-        \Log::info('Notification created:', [
-            'notification_id' => $notification->id,
-            'user_id' => $booking->user->id,
-            'booking_id' => $bookingId
-        ]);
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Notification sent successfully'
-        ]);
-    } catch (\Exception $e) {
-        \Log::error('Error sending notification:', [
-            'error' => $e->getMessage(),
-            'booking_id' => $bookingId
-        ]);
-
-        return response()->json([
-            'success' => false,
-            'message' => 'Failed to send notification: ' . $e->getMessage()
-        ], 500);
     }
-}
 }

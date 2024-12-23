@@ -588,5 +588,11 @@
        });
   </script>
 </body>
-<script src="{{ asset('js/script.js') }}"></script>
+
+<script>
+const navDialog = document.getElementById('nav-dialog');
+function handleMenu(){
+    navDialog.classList.toggle('hidden');
+}
+</script>
 </html>

@@ -7,17 +7,34 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Validator;
 use App\Models\BusBooking; // Add this import
+use App\Models\Notification;
 
 class ProfileController extends Controller
 {
     public function userprofile(): View
     {
-        // Get bus,flight bookings for the authenticated user
+        // Get bookings
         $busBookings = BusBooking::where('user_id', Auth::id())->get();
         $flightBookings = FlightBooking::where('user_id', Auth::id())->get();
+
+        // Get notifications with debug info
+        $notifications = Notification::where('user_id', Auth::id())
+            ->orderBy('created_at', 'desc')
+            ->get();
         
-        // Pass the bookings to the view
-        return view('userprofile', compact('busBookings','flightBookings'));
+        // Debug information
+        \Log::info('Notifications count: ' . $notifications->count());
+        \Log::info('Notifications data: ', $notifications->toArray());
+
+        // Calculate unread count from notifications collection
+        $unreadNotificationsCount = $notifications->where('is_read', false)->count();
+
+        return view('userprofile', compact(
+            'busBookings',
+            'flightBookings',
+            'notifications',
+            'unreadNotificationsCount'
+        ));
     }
 
     public function update(Request $request): RedirectResponse
@@ -67,5 +84,27 @@ class ProfileController extends Controller
         $booking = FlightBooking::where('user_id', Auth::id())->findOrFail($id);
         $booking->delete();
         return back()->with('success', 'Flight booking deleted successfully.');
+    }
+
+    public function markNotificationAsRead($id)
+    {
+        try {
+            $notification = Notification::where('user_id', Auth::id())
+                ->where('id', $id)
+                ->firstOrFail();
+        
+            $notification->update(['is_read' => true]);
+        
+            return response()->json([
+                'success' => true,
+                'message' => 'Notification marked as read'
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('Error marking notification as read: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to mark notification as read'
+            ], 500);
+        }
     }
 }

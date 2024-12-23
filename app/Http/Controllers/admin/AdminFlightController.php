@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\FlightBooking;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use App\Models\Notification;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
@@ -123,6 +124,48 @@ class AdminFlightController extends Controller
                 'flight_id' => $flight->id
             ]);
             return back()->withErrors(['error' => 'Failed to delete flight.']);
+        }
+    }
+
+    public function sendNotification(Request $request, $bookingId)
+    {
+        try {
+            $booking = FlightBooking::with('user')->findOrFail($bookingId);
+        
+            \Log::info('Flight notification request received:', [
+                'booking_id' => $bookingId,
+                'request_data' => $request->all()
+            ]);
+
+            $validated = $request->validate([
+                'message' => 'required|string|max:500'
+            ]);
+
+            $notification = Notification::create([
+                'user_id' => $booking->user->id,
+                'message' => $validated['message']
+            ]);
+
+            \Log::info('Flight notification created:', [
+                'notification_id' => $notification->id,
+                'user_id' => $booking->user->id,
+                'booking_id' => $bookingId
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Notification sent successfully'
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('Flight notification error:', [
+                'error' => $e->getMessage(),
+                'booking_id' => $bookingId
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to send notification: ' . $e->getMessage()
+            ], 500);
         }
     }
 }
