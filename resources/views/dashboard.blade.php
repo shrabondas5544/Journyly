@@ -205,7 +205,7 @@
         <div class="min-w-[300px] bg-white shadow-lg rounded-lg overflow-hidden hover:transition-scale duration-300 ease-in-out hover:scale-95">
           <div class="relative">
             <img
-              src="https://via.placeholder.com/300x200"
+              src="{{ asset('images/istockphoto.jpg') }}"
               alt="Costa Rica Quest"
               class="w-full h-48 object-cover"
             />
@@ -224,7 +224,7 @@
         <div class="min-w-[300px] bg-white shadow-lg rounded-lg overflow-hidden hover:transition-scale duration-300 ease-in-out hover:scale-95">
           <div class="relative">
             <img
-              src="https://via.placeholder.com/300x200"
+              src="{{ asset('images/legacy-hotel-at-img-academy.jpg') }}"
               alt="Amalfi Coast Walking"
               class="w-full h-48 object-cover"
             />
@@ -243,7 +243,7 @@
         <div class="min-w-[300px] bg-white shadow-lg rounded-lg overflow-hidden hover:transition-scale duration-300 ease-in-out hover:scale-95">
           <div class="relative">
             <img
-              src="https://via.placeholder.com/300x200"
+              src="{{ asset('images/pexels-photo-261102.jpeg') }}"
               alt="Best Of Vietnam"
               class="w-full h-48 object-cover"
             />
@@ -263,7 +263,7 @@
         <div class="min-w-[300px] bg-white shadow-lg rounded-lg overflow-hidden hover:transition-scale duration-300 ease-in-out hover:scale-95">
           <div class="relative">
             <img
-              src="https://via.placeholder.com/300x200"
+              src="{{ asset('images/premium_photo.jpg') }}"
               alt="Spanish Wonder"
               class="w-full h-48 object-cover"
             />
