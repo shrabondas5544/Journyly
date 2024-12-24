@@ -252,7 +252,7 @@
                     <div class="flex justify-end mt-4 gap-3">
                         <button 
                             onclick="closeNotificationModal()"
-                            class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition-colors">
+                            class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors">
                             Cancel
                         </button>
                         <button 

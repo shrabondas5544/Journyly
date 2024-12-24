@@ -143,72 +143,6 @@
       </div>
     </section>
   </main>
-  <!--stats-->
-    
-  <div class="container flex flex-col mx-auto bg-transparent my-10">
-    <div class="w-full draggable flex flex-col">
-        <!-- Section Title 
-        <div class="container mx-auto my-5 px-4">
-            <h2 class="text-2xl md:text-3xl font-bold text-gray-800 mb-4 text-left">
-                Our service Statistics
-            </h2>
-        </div>-->
-        
-        <!-- Horizontal Stats -->
-        <div class="container flex flex-wrap justify-between items-center gap- mx-auto px-14">
-            <!-- Successful Projects -->
-            <div class="bg-white overflow-hidden shadow sm:rounded-lg dark:bg-gray-900 hover:transition-scale duration-300 ease-in-out hover:scale-110 p-3">
-              <div class="px-4 py-5 sm:p-16 ">
-                  <dl>
-                      <dt class="text-sm leading-5 font-medium text-gray-500 truncate dark:text-gray-400">Total free
-                          servers</dt>
-                          <h3 class="text-4xl md:text-5xl font-extrabold leading-tight text-center text-blue-500">
-                            <span id="countto1" countTo="20"></span>k+
-                        </h3>
-                  </dl>
-              </div>
-            </div>
-            <!-- Annual Revenue Growth -->
-            <div class="bg-white overflow-hidden shadow sm:rounded-lg dark:bg-gray-900 hover:transition-scale duration-300 ease-in-out hover:scale-110 p-3">
-              <div class="px-4 py-5 sm:p-16">
-                  <dl>
-                      <dt class="text-sm leading-5 font-medium text-gray-500 truncate dark:text-gray-400">Total free
-                          servers</dt>
-                          <h3 class="text-4xl md:text-5xl font-extrabold leading-tight text-center text-blue-500">
-                            <span id="countto2" countTo="455"></span>k+
-                        </h3>
-                  </dl>
-              </div>
-            </div>
-            <!-- Global Partners -->
-            <div class="bg-white overflow-hidden shadow sm:rounded-lg dark:bg-gray-900 hover:transition-scale duration-300 ease-in-out hover:scale-110 p-3">
-              <div class="px-4 py-5 sm:p-16">
-                  <dl>
-                      <dt class="text-sm leading-5 font-medium text-gray-500 truncate dark:text-gray-400 ">Total free
-                          servers</dt>
-                          <h3 class="text-4xl md:text-5xl font-extrabold leading-tight text-center text-blue-500">
-                            <span id="countto3" countTo="18000"></span>+
-                        </h3>
-                  </dl>
-              </div>
-            </div>
-            <!-- Daily Website Visitors -->
-            <div class="bg-white overflow-hidden shadow sm:rounded-lg dark:bg-gray-900 hover:transition-scale duration-300 ease-in-out hover:scale-110 p-3">
-              <div class="px-4 py-5 sm:p-16">
-                  <dl>
-                      <dt class="text-sm leading-5 font-medium text-gray-500 truncate dark:text-gray-400">Total free
-                          servers</dt>
-                          <h3 class="text-4xl md:text-5xl font-extrabold leading-tight text-center text-blue-500">
-                            <span id="countto4" countTo="2888"></span>+
-                        </h3>
-                  </dl>
-              </div>
-            </div>
-        </div>
-      </div>
-    </div>
-
-
   <section class="best places py-12 bg-">
     <div class="container mx-auto px-6">
       <!-- Section Title -->
@@ -562,31 +496,6 @@
     </div>
   </footer>
   <script src="https://cdn.jsdelivr.net/gh/Loopple/loopple-public-assets@main/motion-tailwind/scripts/plugins/countup.min.js"></script>
-  <script>
-    let numbers = document.querySelectorAll("[countTo]");
-
-       numbers.forEach((number) => {
-           let ID = number.getAttribute("id");
-           let value = number.getAttribute("countTo");
-           let countUp = new CountUp(ID, value);
-
-           if (number.hasAttribute("data-decimal")) {
-           const options = {
-                 decimalPlaces: 1,
-               };
-           countUp = new CountUp(ID, 2.8, options);
-           } else {
-           countUp = new CountUp(ID, value);
-           }
-
-           if (!countUp.error) {
-           countUp.start();
-           } else {
-           console.error(countUp.error);
-           number.innerHTML = value;
-           }
-       });
-  </script>
 </body>
 
 <script>

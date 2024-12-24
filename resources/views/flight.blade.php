@@ -529,5 +529,10 @@
         </div>
     </div>
 </body>
-<script src="script.js"></script>
+<script>
+const navDialog = document.getElementById('nav-dialog');
+function handleMenu(){
+    navDialog.classList.toggle('hidden');
+}
+</script>
 </html>

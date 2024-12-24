@@ -401,4 +401,10 @@
     </script>
 
 </body>
+<script>
+const navDialog = document.getElementById('nav-dialog');
+function handleMenu(){
+    navDialog.classList.toggle('hidden');
+}
+</script>
 </html>
