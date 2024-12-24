@@ -384,25 +384,71 @@ document.addEventListener('DOMContentLoaded', function() {
     const incrementBtn = document.getElementById('incrementBtn');
     const countDisplay = document.getElementById('passengerCount');
     const passengerInput = document.getElementById('passengerInput');
+    const cardNumInput = document.getElementById('card_num');
+    const cvvInput = document.getElementById('cvv');
+    const expDateInput = document.getElementById('exp_date');
 
     let basePrice = parseFloat('{{ $bus->discounted_price ?? 900 }}');
     const taxRate = 0.05;
     let count = 1;
 
+    // Set minimum date for expiration date to tomorrow
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    expDateInput.min = tomorrow.toISOString().split('T')[0];
+
+    // Card number validation
+    cardNumInput.addEventListener('input', function() {
+        this.value = this.value.replace(/\D/g, '').slice(0, 16);
+    });
+
+    // CVV validation
+    cvvInput.addEventListener('input', function() {
+        this.value = this.value.replace(/\D/g, '').slice(0, 3);
+    });
+
+    function validateForm() {
+        const errors = [];
+
+        // Card number validation
+        if (!cardNumInput.value) {
+            errors.push('Please enter card number');
+        } else if (cardNumInput.value.length !== 16) {
+            errors.push('Card number must be 16 digits');
+        }
+
+        // CVV validation
+        if (!cvvInput.value) {
+            errors.push('Please enter CVV');
+        } else if (cvvInput.value.length !== 3) {
+            errors.push('CVV must be 3 digits');
+        }
+
+        // Expiration date validation
+        if (!expDateInput.value) {
+            errors.push('Please select expiration date');
+        } else {
+            const selectedDate = new Date(expDateInput.value);
+            const today = new Date();
+            if (selectedDate <= today) {
+                errors.push('Expiration date must be in the future');
+            }
+        }
+
+        return errors;
+    }
+
     function updatePrices() {
-        const passengerCount = parseInt(passengerInput.value);
-        const subtotal = basePrice * passengerCount;
+        const subtotal = basePrice * count;
         const savings = 0;
         const tax = subtotal * taxRate;
         const total = subtotal + tax - savings;
 
-        // Update display elements
         document.querySelector('[data-subtotal]').textContent = `BDT ${subtotal.toFixed(2)}৳`;
         document.querySelector('[data-savings]').textContent = `BDT ${savings.toFixed(2)}৳`;
         document.querySelector('[data-tax]').textContent = `BDT ${tax.toFixed(2)}৳`;
         document.querySelector('[data-total]').textContent = `BDT ${total.toFixed(2)}৳`;
 
-        // Update hidden inputs
         subtotalInput.value = subtotal.toFixed(2);
         taxInput.value = tax.toFixed(2);
         savingsInput.value = savings.toFixed(2);
@@ -413,15 +459,12 @@ document.addEventListener('DOMContentLoaded', function() {
         countDisplay.textContent = count;
         passengerInput.value = count;
         
-        // Disable/enable buttons based on count
         decrementBtn.disabled = count <= 1;
         incrementBtn.disabled = count >= 10;
         
-        // Visual feedback for disabled state
         decrementBtn.style.opacity = count <= 1 ? '0.5' : '1';
         incrementBtn.style.opacity = count >= 10 ? '0.5' : '1';
 
-        // Update prices whenever passenger count changes
         updatePrices();
     }
 
@@ -443,31 +486,28 @@ document.addEventListener('DOMContentLoaded', function() {
     form.addEventListener('submit', function(e) {
         e.preventDefault();
         
-        // Update prices one final time before submission
-        updatePrices();
+        const errors = validateForm();
         
-        // Basic validation
-        const cardNum = document.getElementById('card_num').value;
-        const cvv = document.getElementById('cvv').value;
-        const expDate = document.getElementById('exp_date').value;
-        
-        if (!cardNum || !cvv || !expDate) {
-            alert('Please fill in all payment details');
-            return;
+        if (errors.length > 0) {
+            alert(errors.join('\n'));
+            return false;
         }
 
-        // Verify numeric values are set
-        const subtotal = subtotalInput.value;
-        if (!subtotal || isNaN(parseFloat(subtotal))) {
-            alert('Error: Price calculation failed');
-            return;
+        const confirmMessage = `Are you sure you want to book this ticket?\n\nNumber of Passengers: ${count}\nTotal Amount: ${document.querySelector('[data-total]').textContent}`;
+        
+        if (confirm(confirmMessage)) {
+            // Set a flag to prevent double submission
+            if (this.getAttribute('data-submitting')) {
+                return false;
+            }
+            this.setAttribute('data-submitting', 'true');
+            
+            // Submit the form
+            this.submit();
         }
-
-        // Submit the form
-        this.submit();
     });
 
-    // Initialize display and prices
+    // Initialize
     updatePassengerCount();
 });
 </script>

@@ -14,13 +14,20 @@ class BusBookingController extends Controller
         // Get authenticated user
         $user = Auth::user();
         
+        
         // Fetch bus details based on ID
         $bus = Bus::findOrFail($id);
+
+        // Add validation for no available seats
+        if ($bus->available_seats <= 0) {
+            return back()->with('error', 'Sorry, this bus is fully booked.');
+        }
         
         // Pass both bus and user data to the view
         return view('busbooking', [
             'bus' => $bus,
-            'user' => $user
+            'user' => $user,
+            'available_seats' => $bus->available_seats
         ]);
     }
 
@@ -37,7 +44,16 @@ class BusBookingController extends Controller
 
         $bus = Bus::findOrFail($id);
 
+        // Check if enough seats are available
+        if ($bus->available_seats < $request->passengers) {
+            return back()->with('error', 'Sorry, only ' . $bus->available_seats . ' seats available. Please reduce the number of passengers.');
+        }
+
+
         try {
+
+            \DB::beginTransaction();
+
             $booking = BusBooking::create([
                 'user_id' => Auth::id(),
                 'bus_id' => $id,
@@ -57,8 +73,16 @@ class BusBookingController extends Controller
                 'payment_status' => 'pending'
             ]);
 
+            // Update available seats
+            $bus->decrement('available_seats', $request->passengers);
+
+            // Commit the transaction
+            \DB::commit();
+
             return redirect()->route('account.dashboard')->with('success', 'Hey '. Auth::user()->name .' your bus booked successfully!');
         } catch (\Exception $e) {
+
+            \DB::rollback();
             return back()->with('error', 'Error creating booking: ' . $e->getMessage());
         }
     }

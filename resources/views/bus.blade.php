@@ -76,8 +76,8 @@
           <div class="mt-6">
             <a href="{{ route('account.dashboard') }}" class="font-medium m-3 p-3 hover:bg-blue-400 transition-colors duration-500 ease-in-out rounded-lg block ">home</a>
             <a href="hotelbook.html" class="font-medium m-3 p-3 hover:bg-blue-400 transition-colors duration-500 ease-in-out rounded-lg block">Hotel</a>
-            <a href="airlineTticket.html" class="font-medium m-3 p-3 hover:bg-blue-400 transition-colors duration-500 ease-in-out rounded-lg block">Flight</a>
-            <a href="busticket.html" class="font-medium m-3 p-3 hover:bg-blue-400 transition-colors duration-500 ease-in-out rounded-lg block">Bus</a>
+            <a href="{{ route('account.flight.search') }}" class="font-medium m-3 p-3 hover:bg-blue-400 transition-colors duration-500 ease-in-out rounded-lg block">Flight</a>
+            <a href="{{ route('account.bus.search') }}" class="font-medium m-3 p-3 hover:bg-blue-400 transition-colors duration-500 ease-in-out rounded-lg block">Bus</a>
             <a href="trainticket.html" class="font-medium m-3 p-3 hover:bg-blue-400 transition-colors duration-500 ease-in-out rounded-lg block">Train</a>
           </div> 
           <div class="h-[1px] bg-gray-300"></div>
@@ -159,7 +159,7 @@
             <div class="w-full lg:w-3/4 bg-gradient-to-br from-blue-200 via-blue-50 to-transparent p-4 rounded-md shadow-md">
                 <!-- Sort Options -->
                 <div class="flex justify-between items-center mb-4">
-                    <h2 class="text-lg font-semibold"> 7 Available Buses</h2>
+                    <h2 class="text-lg font-semibold available-buses-count"></h2>
                     <div>
                         <button class="px-4 py-2 text-sm bg-blue-300 rounded-l-md my-2 sort-btn" data-sort="low_to_high">Low to High</button>
                         <button class="px-4 py-2 text-sm bg-blue-300 rounded-r-md my-2 sort-btn" data-sort="high_to_low">High to Low</button>
@@ -236,10 +236,13 @@
                                                 <p class="text-gray-500">No buses found matching your criteria</p>
                                             </div>
                                         `);
-                                    return;
+                                        // Update the count to 0
+                                        $('.available-buses-count').text('0 Available Buses');
+                                        return
                                     }
 
                                     // Sort the response array if needed
+                                    let buses = response.buses;
                                     if (currentSort === 'low_to_high') {
                                         response.sort((a, b) => parseFloat(a.discounted_price) - parseFloat(b.discounted_price));
                                     } else if (currentSort === 'high_to_low') {
@@ -276,25 +279,32 @@
                                                     </div>
 
                                                     <div class="text-right">
-                                                        ${parseFloat(bus.original_price) > parseFloat(bus.discounted_price) ? 
-                                                            `<p class="text-gray-500 line-through">BDT ${bus.original_price}৳</p>` : ''
+                                                        ${parseFloat(bus.original_price) > parseFloat(bus.discounted_price) ?
+                                                         `<p class="text-gray-500 line-through">BDT ${bus.original_price}৳</p>` : ''
                                                         }
                                                         <p class="text-lg text-red-500 font-semibold">BDT ${bus.discounted_price}৳</p>
                                                         <p class="text-sm ${bus.available_seats < 5 ? 'text-red-500' : 'text-gray-500'}">
                                                             ${bus.available_seats} Seats Available
                                                         </p>
-                    
-                                                        ${isAuthenticated ? 
-                                                            `<a href="/bus/book/${bus.id}" class="block">
-                                                                <button class="mt-2 bg-sky-500 text-white px-4 py-1 rounded-md hover:bg-sky-600 hover:scale-105 transition-all duration-300 w-full">
-                                                                    Book Ticket
-                                                                </button>
-                                                            </a>` : 
-                                                            `<a href="/account/login" class="block">
-                                                                <button class="mt-2 bg-sky-500 text-white px-4 py-1 rounded-md hover:bg-sky-600 hover:scale-105 transition-all duration-300 w-full">
-                                                                    Book Ticket
-                                                                </button>
-                                                            </a>`
+    
+                                                        ${bus.available_seats > 0 ? 
+                                                            // If seats are available, show Book Ticket button based on authentication
+                                                            (isAuthenticated ?
+                                                                `<a href="/bus/book/${bus.id}" class="block">
+                                                                    <button class="mt-2 bg-sky-500 text-white px-4 py-1 rounded-md hover:bg-sky-600 hover:scale-105 transition-all duration-300 w-full">
+                                                                        Book Ticket
+                                                                    </button>
+                                                                </a>` :
+                                                                `<a href="/account/login" class="block">
+                                                                    <button class="mt-2 bg-sky-500 text-white px-4 py-1 rounded-md hover:bg-sky-600 hover:scale-105 transition-all duration-300 w-full">
+                                                                        Book Ticket
+                                                                    </button>
+                                                                </a>`
+                                                            ) : 
+                                                            // If no seats available, show Sold Out button
+                                                            `<button disabled class="mt-2 bg-gray-400 text-white px-4 py-1 rounded-md w-full cursor-not-allowed">
+                                                                Sold Out
+                                                            </button>`
                                                         }
                                                     </div>
                                                 </div>

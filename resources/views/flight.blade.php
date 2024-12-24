@@ -19,7 +19,7 @@
         <div id="nav-menu" class="hidden md:flex gap-10">
             <a href="{{ route('account.dashboard') }}" class="font-medium hover:text-blue-500 transition-scale duration-300 ease-in-out hover:scale-110 ">home</a>
             <a href="hotelbook.html" class="font-medium hover:text-blue-500 transition-scale duration-300 ease-in-out hover:scale-110 ">Hotel</a>
-            <a href="airlineTticket.html" class="font-medium hover:text-blue-500 transition-scale duration-300 ease-in-out hover:scale-110 ">Flight</a>
+            <a href="{{ route('account.flight.search') }}" class="font-medium hover:text-blue-500 transition-scale duration-300 ease-in-out hover:scale-110 ">Flight</a>
             <a href="{{ route('account.bus.search') }}" class="font-medium hover:text-blue-500 transition-scale duration-300 ease-in-out hover:scale-110 ">Bus</a>
             <a href="trainticket.html" class="font-medium hover:text-blue-500 transition-scale duration-300 ease-in-out hover:scale-110 ">Train</a>
         </div>
@@ -76,8 +76,8 @@
           <div class="mt-6">
             <a href="{{ route('account.dashboard') }}" class="font-medium m-3 p-3 hover:bg-blue-400 transition-colors duration-500 ease-in-out rounded-lg block ">home</a>
             <a href="hotelbook.html" class="font-medium m-3 p-3 hover:bg-blue-400 transition-colors duration-500 ease-in-out rounded-lg block">Hotel</a>
-            <a href="airlineTticket.html" class="font-medium m-3 p-3 hover:bg-blue-400 transition-colors duration-500 ease-in-out rounded-lg block">Flight</a>
-            <a href="busticket.html" class="font-medium m-3 p-3 hover:bg-blue-400 transition-colors duration-500 ease-in-out rounded-lg block">Bus</a>
+            <a href="{{ route('account.flight.search') }}" class="font-medium m-3 p-3 hover:bg-blue-400 transition-colors duration-500 ease-in-out rounded-lg block">Flight</a>
+            <a href="{{ route('account.bus.search') }}" class="font-medium m-3 p-3 hover:bg-blue-400 transition-colors duration-500 ease-in-out rounded-lg block">Bus</a>
             <a href="trainticket.html" class="font-medium m-3 p-3 hover:bg-blue-400 transition-colors duration-500 ease-in-out rounded-lg block">Train</a>
           </div> 
           <div class="h-[1px] bg-gray-300"></div>
@@ -243,7 +243,7 @@
             <div class="w-full lg:w-3/4 bg-gradient-to-br from-blue-200 via-blue-50 to-transparent p-4 rounded-md shadow-md">
                 <!-- Sort Options -->
                 <div class="flex justify-between items-center mb-4">
-                    <h2 class="text-lg font-semibold">Available Flights</h2>
+                    <h2 class="text-lg font-semibold"></h2>
                     <div>
                         <button class="px-4 py-2 text-sm bg-blue-300 rounded-l-md my-2 sort-btn" data-sort="low_to_high">Low to High</button>
                         <button class="px-4 py-2 text-sm bg-blue-300 rounded-r-md my-2 sort-btn" data-sort="high_to_low">High to Low</button>
