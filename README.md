@@ -78,12 +78,12 @@
 
  **Tools: Composer, npm**
 
- 🧪 Testing
+##🧪 Testing
 
-### White Box Testing:
+ **White Box Testing:**
 
-### 100% statement and branch coverage
+ **100% statement and branch coverage**
 
-### Fixed issues in hotel registration and train booking
+ **Fixed issues in hotel registration and train booking**
 
-### Black Box Testing: Validated user workflows
+ **Black Box Testing: Validated user workflows**
