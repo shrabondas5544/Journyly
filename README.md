@@ -74,11 +74,11 @@
 
  - **Backend: PHP (Laravel)**
 
- **Frontend: HTML, Tailwind CSS, JavaScript**
+ - **Frontend: HTML, Tailwind CSS, JavaScript**
 
- **Database: MySQL**
+ - **Database: MySQL**
 
- **Tools: Composer, npm**
+ - **- **Tools: Composer, npm**
 
 ---
 
@@ -86,9 +86,9 @@
 
  **White Box Testing:**
 
- **100% statement and branch coverage**
+ - **100% statement and branch coverage**
 
- **Fixed issues in hotel registration and train booking**
+ - **Fixed issues in hotel registration and train booking**
 
 ---
 
