@@ -90,4 +90,41 @@
 
  **Fixed issues in hotel registration and train booking**
 
- **Black Box Testing: Validated user workflows**
+---
+
+## 🔮 Future Work
+
+    AI-driven itinerary recommendations
+
+    Real-time payment gateways
+
+    Virtual destination previews
+
+    Enhanced analytics dashboard
+
+--- 
+
+## 📄 License
+
+Licensed under MIT License.
+
+---
+
+## 🙏 Acknowledgements
+
+    Redwanullah Yousuf (Adjunct Lecturer, IUB)
+    
+    Laravel community
+
+---
+
+## 📧 Contact
+
+Shrabon Das
+
+    GitHub: shrabondas5544
+
+    Email: shrabondas@gmail.com
+
+    website: shrabondas.com
+
