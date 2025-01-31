@@ -67,3 +67,23 @@
         npm run dev  
 
     Access at http://localhost:8000
+
+💻 Tech Stack
+
+    Backend: PHP (Laravel)
+
+    Frontend: HTML, Tailwind CSS, JavaScript
+
+    Database: MySQL
+
+    Tools: Composer, npm
+
+🧪 Testing
+
+    White Box Testing:
+
+        100% statement and branch coverage
+
+        Fixed issues in hotel registration and train booking
+
+    Black Box Testing: Validated user workflows
