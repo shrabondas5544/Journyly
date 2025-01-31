@@ -40,7 +40,7 @@
 1. **Clone the repository**:  
    bash  
    git clone https://github.com/shrabondas5544/Journyly.git
-    Set up environment:
+2. Set up environment:
 
         Rename .env.example to .env and configure database settings
 
