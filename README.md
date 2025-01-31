@@ -94,13 +94,15 @@
 
 ## 🔮 Future Work
 
- - **AI-driven itinerary recommendations
+ - AI-driven itinerary recommendations
 
- - **Real-time payment gateways
+ - Intregrate AI chatbot
 
- - **Virtual destination previews
+ - Real-time payment gateways
 
-- **Enhanced analytics dashboard
+ - Virtual destination previews
+
+ - Enhanced analytics dashboard
 
 --- 
 
@@ -112,9 +114,9 @@ Licensed under MIT License.
 
 ## 🙏 Acknowledgements
 
- - **Redwanullah Yousuf (Adjunct Lecturer, IUB)
+ - Redwanullah Yousuf (Adjunct Lecturer, IUB)
     
- - **Laravel community
+ - Laravel community
 
 ---
 
@@ -124,7 +126,7 @@ Shrabon Das
 
  - GitHub: shrabondas5544
 
- - **Email: shrabondas@gmail.com
+ - Email: shrabondas@gmail.com
 
  - **website: shrabondas.com
 
