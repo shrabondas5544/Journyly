@@ -38,7 +38,15 @@
 
 ## 🛠️ Installation  
 1. **Clone the repository**:  
-   ```bash  
-   git clone https://github.com/shrabondas5544/Journyly.git  
+   bash  
+   git clone https://github.com/shrabondas5544/Journyly.git
+2.**Set up environment**:
+   Rename .env.example to .env and configure database settings
+3.**Install dependencies:**
+   bash
+    composer install  
+    npm install  
+    npm install -D tailwindcss postcss autoprefixer  
+    npx tailwindcss init -p  
    cd Journyly
 
