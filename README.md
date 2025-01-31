@@ -72,7 +72,7 @@
 
 ## 💻 Tech Stack
 
- **Backend: PHP (Laravel)**
+ - **Backend: PHP (Laravel)**
 
  **Frontend: HTML, Tailwind CSS, JavaScript**
 
