@@ -1,110 +1,43 @@
-[Your Project Name]
+# Travel and Tour Management System (TTMS) 🚀  
+![GitHub license](https://img.shields.io/github/license/shrabondas5544/Journyly?style=flat-square)  
+[![GitHub stars](https://img.shields.io/github/stars/shrabondas5544/Journyly?style=social)](https://github.com/shrabondas5544/Journyly/stargazers)  
 
-GitHub license
-GitHub stars
+**TTMS** is a web-based platform designed to simplify travel planning, booking, and management. It integrates hotel, flight, bus, and train bookings, tour guide scheduling, and itinerary generation into a single system. Built with Laravel, MySQL, and Tailwind CSS.
 
-A short description of your project and its purpose.
-📝 Table of Contents
+---
 
-    About
+## 📝 Table of Contents  
+- [Features](#features)  
+- [Installation](#installation)  
+- [Tech Stack](#tech-stack)  
+- [Testing](#testing)  
+- [Screenshots](#screenshots)  
+- [Future Work](#future-work)  
+- [License](#license)  
+- [Acknowledgements](#acknowledgements)  
+- [Contact](#contact)  
 
-    Features
+---
 
-    Installation
+## ✨ Key Features  
+### **User Features**  
+- **Destination Exploration**: Search destinations by location  
+- **Multi-Service Booking**: Hotels, flights, buses, and trains  
+- **Tour Guide Scheduling**: Book guides based on availability and ratings  
+- **Personalized Itineraries**: Generate custom travel plans  
+- **Invoice Printing**: Download/print booking confirmations  
+- **Notifications**: Real-time updates for bookings and offers  
 
-    Usage
+### **Admin Features**  
+- **Manage Transport & Hotels**: Add/update flights, buses, trains, and hotels  
+- **Booking Analytics**: View booking history and trends  
+- **Notifications**: Send alerts to users  
+- **Dashboard**: Monitor system activity and user feedback  
 
-    Contributing
+---
 
-    License
-
-    Contact
-
-🚀 About
-
-Provide a detailed description of your project:
-
-    What problem does it solve?
-
-    What technologies/tools did you use?
-
-    What inspired you to build this?
-
-Example:
-
-    "This project is a capstone project for Coursera's XYZ course, focusing on [machine learning/data analysis/other]. It leverages [Python/Pandas/Scikit-learn/etc.] to [solve XYZ problem]."
-
-✨ Features
-
-List the key features of your project:
-
-    Feature 1: E.g., "Data preprocessing pipeline."
-
-    Feature 2: E.g., "Interactive visualization dashboard."
-
-    Feature 3: E.g., "Integration with XYZ API."
-
-🛠️ Installation
-
-Steps to set up the project locally:
-bash
-Copy
-
-# Clone the repository  
-git clone https://github.com/shrabondas5544/[Your-Repo-Name].git  
-
-# Navigate to the project directory  
-cd [Your-Repo-Name]  
-
-# Install dependencies (if applicable)  
-pip install -r requirements.txt  
-
-🖥️ Usage
-
-How to use your project:
-
-    Step 1: Load the dataset.
-
-    Step 2: Run the main script:
-    bash
-    Copy
-
-    python main.py  
-
-    Step 3: Follow the prompts/UI instructions.
-
-Include code snippets, screenshots, or GIFs if possible.
-🤝 Contributing
-
-Contributions are welcome! Follow these steps:
-
-    Fork the repository.
-
-    Create a new branch:
-    bash
-    Copy
-
-    git checkout -b feature/your-feature-name  
-
-    Commit your changes.
-
-    Push to the branch and open a pull request.
-
-📄 License
-
-This project is licensed under the MIT License (or your chosen license).
-📧 Contact
-
-For questions or feedback:
-
-    Email: your-email@example.com
-
-    GitHub: shrabondas5544
-
-🙌 Acknowledgments
-
-    Coursera for the course materials.
-
-    XYZ Library for providing critical tools.
-
-Replace [Your-Repo-Name] with the actual repository name (e.g., Coursera_Capstone or Data-Science-Projects). Customize the sections based on your project’s specifics (e.g., add screenshots, dataset sources, or deployment instructions). Let me know if you need help refining it further! 😊
+## 🛠️ Installation  
+1. **Clone the repository**:  
+   ```bash  
+   git clone https://github.com/shrabondas5544/Journyly.git  
+   cd Journyly  
