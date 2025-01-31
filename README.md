@@ -40,13 +40,35 @@
 1. **Clone the repository**:  
    bash  
    git clone https://github.com/shrabondas5544/Journyly.git
-2.**Set up environment**:
-   Rename .env.example to .env and configure database settings
-3.**Install dependencies:**
-   bash
+    Set up environment:
+
+        Rename .env.example to .env and configure database settings
+
+    Install dependencies:
+    bash
+    Copy
+
     composer install  
     npm install  
     npm install -D tailwindcss postcss autoprefixer  
     npx tailwindcss init -p  
-   cd Journyly
 
+    Database setup:
+
+        Create MySQL database named Journyly
+
+        Migrate and seed:
+        bash
+        Copy
+
+        php artisan migrate  
+        php artisan key:generate  
+
+    Run the app:
+    bash
+    Copy
+
+    php artisan serve  
+    npm run dev  
+
+    Access at http://localhost:8000
