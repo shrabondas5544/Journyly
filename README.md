@@ -1,5 +1,5 @@
 # Journyly - A Travel and Tour Management System (TTMS) 🚀  
-![GitHub license](https://github.com/shrabondas5544/Journyly?tab=MIT-1-ov-file#readme)  
+![GitHub license](https://img.shields.io/github/license/shrabondas5544/Journyly?tab=MIT-1-ov-file#readme?style=flat-square)  
 [![GitHub stars](https://img.shields.io/github/stars/shrabondas5544/Journyly?style=social)](https://github.com/shrabondas5544/Journyly/stargazers)  
 
 **TTMS** is a web-based platform designed to simplify travel planning, booking, and management. It integrates hotel, flight, bus, and train bookings, tour guide scheduling, and itinerary generation into a single system. Built with Laravel, MySQL, and Tailwind CSS.
