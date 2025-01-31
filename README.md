@@ -122,7 +122,7 @@ Licensed under MIT License.
 
 Shrabon Das
 
- - **GitHub: shrabondas5544
+ - GitHub: shrabondas5544
 
  - **Email: shrabondas@gmail.com
 
