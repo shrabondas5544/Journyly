@@ -38,11 +38,11 @@
 
 ## 🛠️ Installation  
 1. **Clone the repository**:  
-   bash  
+   
    git clone https://github.com/shrabondas5544/Journyly.git
 2. Set up environment:
 
-        Rename .env.example to .env and configure database settings
+   Rename ".env.example" to ".env" and configure database settings
    
 4. Install dependencies:
 
