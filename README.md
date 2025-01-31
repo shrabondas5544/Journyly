@@ -43,31 +43,27 @@
 2. Set up environment:
 
         Rename .env.example to .env and configure database settings
-  Install dependencies:
-    bash
-    Copy
+   
+4. Install dependencies:
 
-    composer install  
-    npm install  
-    npm install -D tailwindcss postcss autoprefixer  
-    npx tailwindcss init -p  
+        composer install  
+        npm install  
+        npm install -D tailwindcss postcss autoprefixer  
+        npx tailwindcss init -p  
 
-    Database setup:
+5. Database setup:
 
-        Create MySQL database named Journyly
+   Create MySQL database named Journyly
 
-        Migrate and seed:
-        bash
-        Copy
-
+   Migrate and seed:
+   
         php artisan migrate  
         php artisan key:generate  
 
-    Run the app:
-    bash
-    Copy
+5. Run the app:
+   
 
-    php artisan serve  
-    npm run dev  
+        php artisan serve  
+        npm run dev  
 
     Access at http://localhost:8000
