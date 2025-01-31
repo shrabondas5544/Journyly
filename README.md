@@ -70,15 +70,15 @@
 
 ## 💻 Tech Stack
 
-### Backend: PHP (Laravel)
+ **Backend: PHP (Laravel)**
 
-### Frontend: HTML, Tailwind CSS, JavaScript
+ **Frontend: HTML, Tailwind CSS, JavaScript**
 
-### Database: MySQL
+ **Database: MySQL**
 
-### Tools: Composer, npm
+ **Tools: Composer, npm**
 
-## 🧪 Testing
+ 🧪 Testing
 
 ### White Box Testing:
 
