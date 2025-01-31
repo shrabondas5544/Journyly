@@ -43,8 +43,7 @@
 2. Set up environment:
 
         Rename .env.example to .env and configure database settings
-
-    Install dependencies:
+  Install dependencies:
     bash
     Copy
 
