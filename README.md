@@ -1,4 +1,4 @@
-# Journyly - A Travel and Tour Management System (TTMS) 🚀  
+# Journyly - A Travel and Tour Management System (TTMS) ✈️  
 ![GitHub license](https://img.shields.io/github/license/shrabondas5544/Journyly?tab=MIT-1-ov-file#readme?style=flat-square)  
 [![GitHub stars](https://img.shields.io/github/stars/shrabondas5544/Journyly?style=social)](https://github.com/shrabondas5544/Journyly/stargazers)  
 
@@ -78,7 +78,7 @@
 
  - **Database: MySQL**
 
- - **- **Tools: Composer, npm**
+ - **Tools: Composer, npm**
 
 ---
 
@@ -94,13 +94,13 @@
 
 ## 🔮 Future Work
 
-    AI-driven itinerary recommendations
+ - **AI-driven itinerary recommendations
 
-    Real-time payment gateways
+ - **Real-time payment gateways
 
-    Virtual destination previews
+ - **Virtual destination previews
 
-    Enhanced analytics dashboard
+- **Enhanced analytics dashboard
 
 --- 
 
@@ -112,9 +112,9 @@ Licensed under MIT License.
 
 ## 🙏 Acknowledgements
 
-    Redwanullah Yousuf (Adjunct Lecturer, IUB)
+ - **Redwanullah Yousuf (Adjunct Lecturer, IUB)
     
-    Laravel community
+ - **Laravel community
 
 ---
 
@@ -122,9 +122,9 @@ Licensed under MIT License.
 
 Shrabon Das
 
-    GitHub: shrabondas5544
+ - **GitHub: shrabondas5544
 
-    Email: shrabondas@gmail.com
+ - **Email: shrabondas@gmail.com
 
-    website: shrabondas.com
+ - **website: shrabondas.com
 
